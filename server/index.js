@@ -6,6 +6,7 @@ const cors = require('cors');
 const volunteerRoute = require('./routes/Volunteer');
 const siteRoute = require('./routes/Site');
 const logRoute = require('./routes/Log');
+const eventRoute = require('./routes/Event');
 
 app.use(express.json());
 app.use(bParse.json());
@@ -25,6 +26,9 @@ app.use('/site', siteRoute);
 
 //Log routes
 app.use('/log', logRoute);
+
+//Event routes
+app.use('/event', eventRoute);
 
 // Test route
 app.get("/dbTest", async (req, res) => {

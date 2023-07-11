@@ -30,7 +30,7 @@ router.get("/edit", async (req, res) => {
   // Create new Site
 router.post("/new", async (req, res) => {
     let data = req.body;
-    let siteName = req.body.siteName;
+    let siteName = req.body.site_name;
     let city = req.body.city;
     let zipcode = req.body.zipcode;
     let note = req.body.note;
