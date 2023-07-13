@@ -85,6 +85,8 @@ const Volunteer = () => {
       });
   };
 
+
+
   // Use effect, on page load/refresh get all volunteer data
   useEffect(() => {
     fetchVolunteerData();
@@ -230,11 +232,11 @@ const Volunteer = () => {
     },
     // Actions icons at end of grid, button for delete via Alert, and Modal for opening logs
     {
-      field: "Actions",
+      field: "Delete/View Log",
       sortable: false,
       flex: 1,
       disableColumnMenu: true,
-      renderCell: ({ row: { volunteer_id } }) => {
+      renderCell: ({ row: { volunteer_id, first_name, last_name } }) => {
         return (
           <Box display="flex">
             <IconButton
@@ -246,7 +248,7 @@ const Volunteer = () => {
               <DeleteOutlinedIcon sx={{ color: colors.redAccent[700] }} />
             </IconButton>
             {/* Action Icon for viewing a modal with volunteers logs */}
-            <LogModal id={volunteer_id} />
+            <LogModal id={volunteer_id} name={first_name + " " + last_name} />
           </Box>
         );
       },

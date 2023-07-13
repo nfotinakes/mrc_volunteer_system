@@ -133,6 +133,7 @@ const AddSite = ({ addSite }) => {
             label="Note"
             name="note"
             onChange={handleNotesChange}
+            fullWidth
           />
 
           <br />

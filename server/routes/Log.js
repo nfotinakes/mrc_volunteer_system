@@ -19,13 +19,13 @@ router.get("/logId", async (req, res) => {
   });
 
 // Get all logs by Volunteer ID
-router.get("/volId", async (req, res) => {
-    let id = req.query.id;
-    let sql = `SELECT * FROM log WHERE volunteer_id = ?`;
-    params = [id];
-    let rows = await executeSQL(sql, params);
-    res.status(200).json(rows);
-  });
+// router.get("/volId", async (req, res) => {
+//     let id = req.query.id;
+//     let sql = `SELECT * FROM log WHERE volunteer_id = ?`;
+//     params = [id];
+//     let rows = await executeSQL(sql, params);
+//     res.status(200).json(rows);
+//   });
 
 // Get all logs by site ID
 router.get("/siteId", async (req, res) => {
@@ -35,6 +35,24 @@ router.get("/siteId", async (req, res) => {
     let rows = await executeSQL(sql, params);
     res.status(200).json(rows);
   });
+
+  // Get all logs by volunteer ID
+router.get("/volId", async (req, res) => {
+  let id = req.query.id;
+  let sql = `SELECT l.log_id, v.first_name, v.last_name, s.site_name, s.zipcode, l.date, l.hours, l.role, l.note FROM mrc_volunteer.log as l JOIN volunteer as v ON l.volunteer_id = v.volunteer_id JOIN mrc_volunteer.site as s on l.site_id = s.site_id where v.volunteer_id=?;`;
+  params = [id];
+  let rows = await executeSQL(sql, params);
+  res.status(200).json(rows);
+});
+
+// Get a volunteers total hours
+router.get("/volHours", async (req, res) => {
+  let id = req.query.id;
+  let sql = `SELECT SUM(hours) AS total_hours FROM mrc_volunteer.log WHERE volunteer_id=?;`;
+  params = [id];
+  let rows = await executeSQL(sql, params);
+  res.status(200).json(rows);
+});
 
 // Get all log by site ID and volunteer ID
 router.get("/volId/siteId", async (req, res) => {

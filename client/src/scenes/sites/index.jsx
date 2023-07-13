@@ -155,7 +155,7 @@ const Sites = () => {
     },
     {
       field: "city",
-      headerName: "city",
+      headerName: "City",
       flex: 1,
       editable: true,
     },
