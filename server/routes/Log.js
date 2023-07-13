@@ -49,8 +49,8 @@ router.get("/volId/siteId", async (req, res) => {
 
   // Create new Log
 router.post("/new", async (req, res) => {
-    let volunteerId = req.body.volunteerId;
-    let siteId = req.body.siteId;
+    let volunteerId = req.body.volunteer_id;
+    let siteId = req.body.site_id;
     let date = req.body.date;
     let hours = req.body.hours;
     let role = req.body.role;

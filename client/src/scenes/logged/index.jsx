@@ -3,11 +3,14 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { useState, useEffect } from "react";
+import AddLog from "./AddLog";
 
 const Logs = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [logs, setLogs] = useState([]);
+  const [volunteers, setVolunteers] = useState(null);
+  const [sites, setSites] = useState(null);
 
   // Fetch all logs from database
   const fetchLogData = () => {
@@ -27,24 +30,82 @@ const Logs = () => {
       });
   };
 
+  const fetchVolunteers = () => {
+    console.log("Fetching Volunteers");
+    // const token = Cookies.get("XSRF-TOKEN");
+
+    fetch(`http://localhost:5000/volunteer/names`)
+      .then((response) => {
+        console.log("FETCH RESP:" + response);
+        return response.json();
+      })
+      .then((responseData) => {
+        setVolunteers(responseData);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const fetchSites = () => {
+    console.log("Fetching Sites");
+    // const token = Cookies.get("XSRF-TOKEN");
+
+    fetch(`http://localhost:5000/site/names`)
+      .then((response) => {
+        console.log("FETCH RESP:" + response);
+        return response.json();
+      })
+      .then((responseData) => {
+        setSites(responseData);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  // Fetch call to add a new volunteer
+  const addLog = (log) => {
+    fetch(`http://localhost:5000/log/new`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(log),
+    })
+      .then((res) => {
+        console.log(res);
+        fetchLogData();
+        fetchVolunteers();
+        fetchSites();
+        // setSnackbar({
+        //   children: "Volunteer succesfully added!",
+        //   severity: "success",
+        // });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   // On load, fetch logs
   useEffect(() => {
     fetchLogData();
+    fetchVolunteers();
+    fetchSites();
   }, []);
 
   // Data Grid column info
   const columns = [
-    { field: "log_id", headerName: "ID" },
+    { field: "log_id", headerName: "Log ID" },
     {
       field: "first_name",
       headerName: "First Name",
-      flex: 1,
+      flex: 0.5,
       cellClassName: "name-column--cell",
     },
     {
       field: "last_name",
       headerName: "Last Name",
-      flex: 1,
+      flex: 0.5,
       cellClassName: "name-column--cell",
     },
     {
@@ -64,12 +125,12 @@ const Logs = () => {
       type: "date",
       valueGetter: ({ value }) => value && new Date(value),
       editable: true,
-      flex: 1,
+      flex: 0.5,
     },
     {
       field: "hours",
       headerName: "Hours",
-      flex: 1,
+      flex: 0.5,
     },
     {
       field: "role",
@@ -86,6 +147,10 @@ const Logs = () => {
   return (
     <Box m="20px">
       <Header title="Volunteer Logs"></Header>
+      {/* <div style={{ width: "100%" }}>
+        For DEBUG: display state.<br></br>
+        {JSON.stringify(logs)}
+      </div> */}
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -123,6 +188,7 @@ const Logs = () => {
           },
         }}
       >
+        <AddLog addLog={addLog} volunteers={volunteers} sites={sites}></AddLog>
         <DataGrid
           checkboxSelection
           rows={logs}

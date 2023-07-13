@@ -49,22 +49,6 @@ const AddSite = ({ addSite }) => {
       console.log("Form submitted:", site);
     }
 
-    // fetch(`http://localhost:5000/volunteer/new`, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(volunteer),
-    // })
-    //   .then((res) => {
-    //     console.log(res);
-    //     // if (res.ok) {
-    //     //   console.log("success");
-    //     // } else {
-    //     //   console.log("error");
-    //     // }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
 
     setSite({
       site_name: null,
@@ -110,7 +94,7 @@ const AddSite = ({ addSite }) => {
           sx={{ height: 40 }}
           onClick={handleClickOpen}
         >
-          Add New Site
+          Add New
         </Button>
       </Box>
       <Dialog

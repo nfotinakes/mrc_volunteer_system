@@ -27,6 +27,17 @@ router.get("/edit", async (req, res) => {
   }
 });
 
+// Get single volunteer info by ID
+router.get("/names", async (req, res) => {
+  try {
+    let sql = `SELECT volunteer_id, first_name, last_name, email FROM volunteer`;
+    let rows = await executeSQL(sql);
+    res.status(200).json(rows);
+  } catch (err) {
+    console.log("Error getting volunteer names: " + err);
+  }
+});
+
 // Delete single volunteer by ID
 router.delete("/delete/:id", async (req, res) => {
   console.log("Delete request received");

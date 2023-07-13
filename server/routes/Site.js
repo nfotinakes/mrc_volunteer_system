@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
 
 // Get single site by ID
 router.get("/names", async (req, res) => {
-    let sql = `SELECT site_name FROM site`;
+    let sql = `SELECT site_id, site_name FROM site`;
     let rows = await executeSQL(sql);
     res.status(200).json(rows);
   });
@@ -44,7 +44,7 @@ router.post("/new", async (req, res) => {
   // Update Site
 router.put("/update/:id", async (req, res) => {
     let id = req.params.id;
-    let siteName = req.body.siteName;
+    let siteName = req.body.site_name;
     let city = req.body.city;
     let zipcode = req.body.zipcode;
     let note = req.body.note;
@@ -53,6 +53,20 @@ router.put("/update/:id", async (req, res) => {
     let rows = executeSQL(sql, params);
     res.send("Site Updated");
   });
+
+  // Delete single volunteer by ID
+router.delete("/delete/:id", async (req, res) => {
+  console.log("Delete request received");
+  try {
+    let id = req.params.id;
+    let sql = `DELETE FROM site WHERE site_id = ?`;
+    params = [id];
+    let rows = await executeSQL(sql, params);
+    res.status(200).json(rows);
+  } catch (err) {
+    console.log("Error deleting site: " + err);
+  }
+});
 
 async function executeSQL(sql, params) {
     return new Promise(function (resolve, reject) {
