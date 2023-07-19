@@ -8,7 +8,6 @@ import Volunteer from "./scenes/volunteer";
 import Sites from "./scenes/sites";
 import Logs from "./scenes/logged";
 import Calendar from "./scenes/calendar";
-import Pie from "./scenes/pie";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -26,7 +25,6 @@ function App() {
               <Route path="/sites" element={<Sites />} />
               <Route path="/logs" element={<Logs />} />
               <Route path="/calendar" element={<Calendar />} />
-              <Route path="/pie" element={<Pie />} />
             </Routes>
           </main>
         </div>
