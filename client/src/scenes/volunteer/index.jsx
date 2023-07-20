@@ -363,7 +363,7 @@ const Volunteer = () => {
       >
         {renderConfirmDialog()}
 
-        <AddVolunteer addVolunteer={addVolunteer} />
+        <AddVolunteer addVolunteer={addVolunteer} refresh={fetchVolunteerData} />
 
         <Box
           m={1}
@@ -411,6 +411,9 @@ const Volunteer = () => {
             console.log("Selected ID's: ", selectedIDsSet);
             const selectedIDs = Array.from(selectedIDsSet);
             setSelectedRows(selectedIDs);
+          }}
+          sx={{
+            boxShadow: 3,
           }}
         />
         {!!snackbar && (

@@ -190,10 +190,10 @@ const Logs = () => {
       >
         <AddLog addLog={addLog} volunteers={volunteers} sites={sites}></AddLog>
         <DataGrid
+          getRowId={(row) => row.log_id}
           checkboxSelection
           rows={logs}
           columns={columns}
-          getRowId={(row) => row.log_id}
           disableRowSelectionOnClick
           editMode="row"
           loading={!logs.length}

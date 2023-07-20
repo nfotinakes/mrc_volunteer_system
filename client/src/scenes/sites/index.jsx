@@ -26,7 +26,7 @@ const Sites = () => {
 
   // Fetch all Sites from database
   const fetchSiteData = () => {
-    console.log("Fetching Volunteers");
+    console.log("Fetching Sites");
 
     fetch(`http://localhost:5000/site`)
       .then((response) => {
@@ -51,7 +51,7 @@ const Sites = () => {
         console.log(res);
         fetchSiteData();
         setSnackbar({
-          children: "Volunteer succesfully added!",
+          children: "Site succesfully added!",
           severity: "success",
         });
       })
@@ -136,7 +136,7 @@ const Sites = () => {
     setAlert({ id: null, open: false });
   };
 
-  // Site Delete Alert "yes" handler, calls the deleteVolunteer function for removing volunteer from database and closes alert
+  // Site Delete Alert "yes" handler, calls the delete the site  
   const handleYes = () => {
     deleteSite(alert.id);
     setAlert({ id: null, open: false });
@@ -172,7 +172,7 @@ const Sites = () => {
       editable: true,
     },
     {
-      field: "Actions",
+      field: "Delete Site",
       sortable: false,
       flex: .5,
       disableColumnMenu: true,
@@ -181,7 +181,7 @@ const Sites = () => {
           <Box display="flex">
             <IconButton
               onClick={() => {
-                // Open alert to confirm volunteer deletion
+                // Open alert to confirm site deletion
                 setAlert({ id: site_id, open: true });
               }}
             >
@@ -203,7 +203,7 @@ const Sites = () => {
       >
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent dividers>
-          {`Pressing 'Yes' will delete the volunteer.`}
+          {`Pressing 'Yes' will delete the site (this may affect volunteer logs).`}
         </DialogContent>
         <DialogActions>
           <Button ref={noButtonRef} onClick={handleNo} color="error">

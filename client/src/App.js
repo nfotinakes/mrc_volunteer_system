@@ -8,6 +8,8 @@ import Volunteer from "./scenes/volunteer";
 import Sites from "./scenes/sites";
 import Logs from "./scenes/logged";
 import Calendar from "./scenes/calendar";
+import DataImport from "./scenes/data_import";
+import BarChart from "./components/BarChart";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -24,7 +26,11 @@ function App() {
               <Route path="/volunteer" element={<Volunteer />} />
               <Route path="/sites" element={<Sites />} />
               <Route path="/logs" element={<Logs />} />
+              <Route path="/dataImport" element={<DataImport />} />
               <Route path="/calendar" element={<Calendar />} />
+              <Route path="/bar" element={<BarChart />} />
+
+
             </Routes>
           </main>
         </div>

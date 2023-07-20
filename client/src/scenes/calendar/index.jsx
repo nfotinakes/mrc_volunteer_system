@@ -180,7 +180,7 @@ const Calendar = () => {
   const handleDelete = () => {
     if (
       window.confirm(
-        `Are you sure you want to delete the event '${alert.title}`
+        `Are you sure you want to delete the event '${alert.title}'`
       )
     ) {
       deleteEvent(alert.id);
@@ -203,7 +203,11 @@ const Calendar = () => {
       >
         <DialogTitle>{alert.title}</DialogTitle>
         <DialogContent dividers>
-          <DialogContentText>Date: {alert.start}</DialogContentText>
+          <DialogContentText>Date:                       {formatDate(alert.start, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}</DialogContentText>
           <DialogContentText>Note: {alert.info}</DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -228,7 +232,8 @@ const Calendar = () => {
           flex="1 1 20%"
           backgroundColor={colors.primary[400]}
           p="15px"
-          borderRadius="4px"
+          borderRadius="8px"
+          boxShadow="3"
         >
           <Typography variant="h5">Events</Typography>
           <List>
@@ -240,7 +245,15 @@ const Calendar = () => {
                   backgroundColor: colors.greenAccent[800],
                   margin: "10px 0",
                   borderRadius: "2px",
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  boxShadow: "3",
+                  "&:hover": {
+                    backgroundColor: colors.blueAccent[700],
+                    color: "white",
+                    "& .MuiListItemIcon-root": {
+                      color: "white"
+                    }
+                  },
                 }}
                 // onClick={(key) => handleItemClick(key)}
                 // onClick={() => {handleItemClick(event)}}
@@ -299,6 +312,9 @@ const Calendar = () => {
             eventClick={handleEventClick}
             eventsSet={(events) => setCurrentEvents(events)}
             ref={calendarRef}
+            eventBorderColor={colors.primary[100]}
+            
+            
 
             // events={getCurrentEvents}
           />

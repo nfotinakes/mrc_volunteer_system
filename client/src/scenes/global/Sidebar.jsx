@@ -143,8 +143,8 @@ const Sidebar = () => {
             />
 
             <Item
-              title="Volunteer Form"
-              to="/form"
+              title="Data Import"
+              to="/dataImport"
               icon={<PersonTwoToneIcon />}
               selected={selected}
               setSelected={setSelected}

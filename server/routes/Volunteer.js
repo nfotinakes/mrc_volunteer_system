@@ -87,6 +87,41 @@ router.post("/new", async (req, res) => {
   }
 });
 
+// Create new volunteer
+router.post("/new/import", async (req, res) => {
+  try {
+    let firstName = req.body.first_name;
+    let lastName = req.body.last_name;
+    let email = req.body.email;
+    let phone = req.body.phone;
+    let zipcode = req.body.zipcode;
+    let licensure = req.body.licensure;
+    let licenseNum = req.body.license_num;
+    let licenseExp = req.body.license_exp;
+    let status = 1;
+    let inputDate = new Date().toJSON().slice(0,10);
+
+    let sql = `INSERT INTO volunteer (first_name, last_name, email, phone, zipcode, status, input_date, licensure, license_num, license_exp) VALUES (?,?,?,?,?,?,?,?,?,?)`;
+    let params = [
+      firstName,
+      lastName,
+      email,
+      phone,
+      zipcode,
+      status,
+      inputDate,
+      licensure,
+      licenseNum,
+      licenseExp,
+    ];
+    console.log(params);
+    let rows = executeSQL(sql, params);
+    res.send("Volunteer Added");
+  } catch (err) {
+    console.log("Error adding volunteer.");
+  }
+});
+
 // Update an existing volunteers info
 router.put("/update/:id", async (req, res) => {
   console.log("Update Request Received");

@@ -14,7 +14,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
 import { tokens } from "../../theme";
 
-const AddVolunteer = ({ addVolunteer }) => {
+const AddVolunteer = ({ addVolunteer, refresh }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode); // If theme colors needed
   const [volunteer, setVolunteer] = useState({
@@ -58,29 +58,54 @@ const AddVolunteer = ({ addVolunteer }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform any necessary form submission logic here
-    volunteer.status = 1;
-    volunteer.input_date = dayjs(inputDate).format();
-    volunteer.license_exp = dayjs(licenseExp).format();
-    volunteer.last_active = dayjs(lastActive).format();
-    console.log("Form submitted:", volunteer);
-    addVolunteer(volunteer);
 
-    setVolunteer({
-      first_name: null,
-      last_name: null,
-      email: null,
-      phone: null,
-      zipcode: null,
-      input_date: null,
-      licensure: null,
-      license_num: null,
-      license_exp: null,
-    });
-    setInputDate(null);
-    setLicenseExp(null);
-    setLastActive(null);
-    setDialog({ open: false });
+    //Set volunteer status as active for submission
+    volunteer.status = 1;
+
+    // If input date filled, format for submission
+    if (inputDate) {
+      volunteer.input_date = dayjs(inputDate).format();
+    }
+
+    // If license expiration date filled, format for submission
+    if (licenseExp) {
+      volunteer.license_exp = dayjs(licenseExp).format();
+    }
+
+    // Check for null values, submit if all filled
+    if (
+      !volunteer.first_name ||
+      !volunteer.last_name ||
+      !volunteer.email ||
+      !volunteer.phone ||
+      !volunteer.zipcode ||
+      !volunteer.input_date ||
+      !volunteer.licensure ||
+      !volunteer.license_num ||
+      !volunteer.license_exp
+    ) {
+      alert("Field has been left blank!");
+    } else {
+      console.log("Form submitted:", volunteer);
+      addVolunteer(volunteer);
+
+      setVolunteer({
+        first_name: null,
+        last_name: null,
+        email: null,
+        phone: null,
+        zipcode: null,
+        input_date: null,
+        licensure: null,
+        license_num: null,
+        license_exp: null,
+      });
+      setInputDate(null);
+      setLicenseExp(null);
+      setLastActive(null);
+      setDialog({ open: false });
+    }
+    refresh();
   };
 
   const handleFirstNameChange = (event) => {
