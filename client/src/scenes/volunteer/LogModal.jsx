@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import { tokens } from "../../theme";
-import { Box, Typography, useTheme, Modal, IconButton } from "@mui/material";
+import { Box, useTheme, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -9,18 +9,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
+/**
+ * Log Dialog component that returns a dialog/modal pop up of a Data Grid
+ * with a specific volunteers logs and total hours.
+ * Props passed in are the volunteers id and name
+ */
 const LogModal = ({ id, name }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -30,6 +23,20 @@ const LogModal = ({ id, name }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+/**
+ * useEffect hook to fetch volunteer logs and total hours if Dialog is open
+ */
+  useEffect(() => {
+    if (open) {
+      fetchLogs(id);
+      fetchHours(id);
+    }
+  }, [id, open]);
+
+  /**
+   * Fetch all logs of a specific volunteer by id, and save to state
+   * @param {number} id The volunteer id 
+   */
   const fetchLogs = (id) => {
     console.log("Fetching Logs");
     // const token = Cookies.get("XSRF-TOKEN");
@@ -46,6 +53,10 @@ const LogModal = ({ id, name }) => {
       });
   };
 
+  /**
+   * Fetch total hours of a volunteer by id
+   * @param {number} id The volunteer id
+   */
   const fetchHours = (id) => {
     console.log("Fetching Logs");
     // const token = Cookies.get("XSRF-TOKEN");
@@ -68,14 +79,11 @@ const LogModal = ({ id, name }) => {
       });
   };
 
-  useEffect(() => {
-    if (open) {
-      fetchLogs(id);
-      fetchHours(id);
-    }
-  }, [id, open]);
 
-  // Column info for datagrid
+
+ /**
+  * Column info for Data Grid
+  */
   const columns = [
     { field: "log_id", headerName: "Log ID", flex: 0.25 },
     {
@@ -140,12 +148,6 @@ const LogModal = ({ id, name }) => {
         ></ArticleOutlinedIcon>
       </IconButton>
       <Box>
-        {/* <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      > */}
         <Dialog
           fullWidth
           maxWidth="false"
@@ -190,45 +192,25 @@ const LogModal = ({ id, name }) => {
                 },
               }}
             >
-              {/* <div style={{ width: "50%", margin: "auto" }}>
-            <div style={{ height: "75%", width: "100%" }}> */}
               <DataGrid
-                // checkboxSelection
                 rows={logs}
                 columns={columns}
                 getRowId={(row) => row.log_id}
                 disableRowSelectionOnClick
                 editMode="row"
-                // processRowUpdate={processRowUpdate}
-                // onProcessRowUpdateError={handleProcessRowUpdateError}
                 slots={{ toolbar: GridToolbar }}
               />
-              {/* </div>
-          </div> */}
             </Box>
           </DialogContent>
-
-          {/* <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Log Modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Data Grid with logs of volunteer by ID Volunteer ID: {id}
-          </Typography>
-        </Box> */}
         <Box marginLeft={5} color={colors.greenAccent[200]}>
           Total Hours Volunteered: {hours}
         </Box>
-        <div>
-          
-        </div>
           <DialogActions>
             <Button color="error" onClick={handleClose}>
               Close
             </Button>
           </DialogActions>
         </Dialog>
-        {/* </Modal> */}
       </Box>
     </div>
   );

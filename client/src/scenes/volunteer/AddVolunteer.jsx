@@ -7,16 +7,22 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Box, useTheme } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DateField } from "@mui/x-date-pickers/DateField";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
 import { tokens } from "../../theme";
 
+/**
+ * AddVolunteer component renders the dialog for adding a new volunteer to the database.
+ * Props passed are the addVolunteer fetch from parent to add the volunteer on submit,
+ * and refresh to fetch updated volunteer list for parent rendering.
+ */
 const AddVolunteer = ({ addVolunteer, refresh }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode); // If theme colors needed
+
+  // Store volunteer info to be added in state
   const [volunteer, setVolunteer] = useState({
     first_name: null,
     last_name: null,
@@ -29,15 +35,21 @@ const AddVolunteer = ({ addVolunteer, refresh }) => {
     license_num: null,
     license_exp: null,
   });
+  // Store date inputs
   const [inputDate, setInputDate] = useState(null);
   const [licenseExp, setLicenseExp] = useState(null);
-  const [lastActive, setLastActive] = useState(null);
-  const [dialog, setDialog] = useState({ open: false });
+  const [dialog, setDialog] = useState({ open: false }); // State for setting dialog open or close
 
+  /**
+   * Handler for toggling dialog open status
+   */
   const handleClickOpen = () => {
     setDialog({ open: true });
   };
 
+  /**
+   * Handler for closing dialog and clearing state data
+   */
   const handleClose = () => {
     setVolunteer({
       first_name: null,
@@ -52,10 +64,13 @@ const AddVolunteer = ({ addVolunteer, refresh }) => {
     });
     setInputDate(null);
     setLicenseExp(null);
-    setLastActive(null);
     setDialog({ open: false });
   };
 
+  /**
+   * Function for submit button click to add the volunteer to the system.
+   * Some input validation inside
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -102,12 +117,14 @@ const AddVolunteer = ({ addVolunteer, refresh }) => {
       });
       setInputDate(null);
       setLicenseExp(null);
-      setLastActive(null);
       setDialog({ open: false });
     }
     refresh();
   };
 
+  /**
+   * The following functions are handlers for the dialog text fields
+   */
   const handleFirstNameChange = (event) => {
     volunteer.first_name = event.target.value;
   };

@@ -13,19 +13,35 @@ import Button from "@mui/material/Button";
 import AddVolunteer from "./AddVolunteer";
 import LogModal from "./LogModal";
 
+/**
+ * Volunteer component displays all volunteers in the system for CRUD operations
+ */
 const Volunteer = () => {
-  const theme = useTheme();
+  /**
+   * Theme and color imports
+   */
+  const theme = useTheme(); 
   const colors = tokens(theme.palette.mode);
+
   const noButtonRef = useRef(null);
-  const [volunteers, setVolunteers] = useState([]);
-  const [snackbar, setSnackbar] = useState(null);
+  const [volunteers, setVolunteers] = useState([]);  // Store all volunteers
+  const [snackbar, setSnackbar] = useState(null);    // Store snackbar alerts
   const [alert, setAlert] = useState({
     id: null,
     open: false,
   });
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]); // Store selected rows for Email Mailto
 
-  // Fetch all Volunteer Data
+    /**
+     * useEffect hook to fetch all volunteer data after render/update
+     */
+    useEffect(() => {
+      fetchVolunteerData();
+    }, []);
+
+  /**
+   * Fetch all volunteer data from database and set to state
+   */
   const fetchVolunteerData = () => {
     console.log("Fetching Volunteers");
     fetch(`http://localhost:5000/volunteer`)
@@ -41,7 +57,10 @@ const Volunteer = () => {
       });
   };
 
-  // Fetch call to delete a volunteer by ID
+  /**
+   * Delete a volunteer from the database, then refresh state
+   * @param {number} id Volunteer unique ID 
+   */
   const deleteVolunteer = (id) => {
     console.log("Deleting Volunteer ID: " + id);
     fetch(`http://localhost:5000/volunteer/delete/${id}`, {
@@ -65,7 +84,10 @@ const Volunteer = () => {
       });
   };
 
-  // Fetch call to add a new volunteer
+  /**
+   * Add a new volunteer to the database
+   * @param {Object} volunteer New volunteer to add to database
+   */
   const addVolunteer = (volunteer) => {
     fetch(`http://localhost:5000/volunteer/new`, {
       method: "POST",
@@ -85,18 +107,19 @@ const Volunteer = () => {
       });
   };
 
+  /**
+   * The following functions handle changes to a volunteer/row in the Data Grid 
+   */
 
-
-  // Use effect, on page load/refresh get all volunteer data
-  useEffect(() => {
-    fetchVolunteerData();
-  }, []);
-
-  // Fetch to process/save an update to row/volunteer
+  
+  /**
+   * Datagrid row update on change, calls database with fetch by volunteer ID
+   * @param {row} newRow The row/volunteer to be updated
+   * @returns The updated row
+   */
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow };
 
-    //handle send data to api
     fetch(`http://localhost:5000/volunteer/update/${updatedRow.volunteer_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -194,13 +217,6 @@ const Volunteer = () => {
       flex: 1,
       editable: true,
       type: "boolean",
-      // valueGetter: (params) => {
-      //   if (params.value === 1) {
-      //     return "Active";
-      //   } else {
-      //     return "Not-Active";
-      //   }
-      // },
     },
     {
       field: "input_date",
@@ -286,20 +302,6 @@ const Volunteer = () => {
     }
   };
 
-  // TODO: CHECK THIS
-  const handleSelected = () => {
-    console.log(selectedRows);
-    // const fullRows = [];
-    // selectedRows.forEach();
-    const emails = selectedRows.map(
-      (id) => volunteers.find((el) => el.volunteer_id === id).email
-    );
-    const mailto = "mailto:" + emails[0];
-    console.log(mailto);
-    window.location.href = mailto;
-    console.log(emails);
-  };
-
   // Delete Volunteer Dialog/Alert popup to confirm yes or no
   const renderConfirmDialog = () => {
     return (
@@ -367,7 +369,6 @@ const Volunteer = () => {
 
         <Box
           m={1}
-          //margin
           display="flex"
           justifyContent="flex-end"
           alignItems="flex-end"
@@ -381,7 +382,6 @@ const Volunteer = () => {
             E-mail Selected
           </Button>
         </Box>
-
         <DataGrid
           getRowId={(row) => row.volunteer_id}
           rows={volunteers}
