@@ -70,6 +70,7 @@ const Sidebar = () => {
         collapsed={isCollapsed}
         width="300px"
         image="../../../assets/morro_bay.jpg"
+        
       >
         <Menu iconShape="square">
           <MenuItem

@@ -162,6 +162,7 @@ export const themeSettings = (mode) => {
               default: "#ebe8e8", //#fcfcfc
             },
             img: `../../assets/logo_CSL_lightmode.svg`,
+            
           }),
     },
 

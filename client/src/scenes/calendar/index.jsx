@@ -22,6 +22,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
 //TODO: Calendar needs work. Not working with backend. Maybe Drop sidebar
 const Calendar = () => {
@@ -36,6 +37,17 @@ const Calendar = () => {
     end: "",
     info: "",
     open: false,
+  });
+
+  const [addEventAlert, setAddEventAlert] = useState({
+    id: "",
+    title: "",
+    start: "",
+    end: "",
+    info: "",
+    open: false,
+    calApi: null,
+    allDay: "",
   });
   const noButtonRef = useRef(null);
 
@@ -113,32 +125,97 @@ const Calendar = () => {
     return currentEvents;
   };
 
+  const handleTitleChange = (event) => {
+    addEventAlert.title = event.target.value;
+    addEventAlert.id = addEventAlert.title + addEventAlert.start;
+  };
+
+  const handleNoteChange = (event) => {
+    addEventAlert.note = event.target.value;
+  };
+
+  const handleAddEventSubmit = () => {
+    if (addEventAlert.title) {
+      addEventAlert.calApi.addEvent({
+        id: addEventAlert.id,
+        title: addEventAlert.title,
+        start: addEventAlert.start,
+        end: addEventAlert.end,
+        note: addEventAlert.note,
+        allDay: addEventAlert.allDay,
+      });
+      let newEvent = {
+        id: addEventAlert.id,
+        title: addEventAlert.title,
+        start: addEventAlert.start,
+        end: addEventAlert.end,
+        note: addEventAlert.note,
+      };
+      addNewEvent(newEvent);
+      setAddEventAlert({
+        id: "",
+        title: "",
+        start: "",
+        end: "",
+        info: "",
+        open: false,
+        calApi: null,
+        allDay: "",
+      });
+    }
+  };
+
+  const handleAddEventCancel = () => {
+    setAddEventAlert({
+      id: "",
+      title: "",
+      start: "",
+      end: "",
+      info: "",
+      open: false,
+      calApi: null,
+      allDay: "",
+    });
+  };
+
   const handleDateClick = (selected) => {
-    
-    const title = prompt("Enter event title:");
-    const note = prompt("Enter event info/note:");
+    // const title = prompt("Enter event title:");
+    // const note = prompt("Enter event info/note:");
+    // const calendarApi = selected.view.calendar;
+    // calendarApi.unselect();
+    // const id = title+selected.startStr;
+    // let newEvent = {
+    //   id: id,
+    //   title: title,
+    //   start: selected.startStr,
+    //   end: selected.endStr,
+    //   note: note,
+    // };
+    // if (title) {
+    //   calendarApi.addEvent({
+    //     id,
+    //     title,
+    //     start: selected.startStr,
+    //     end: selected.endStr,
+    //     allDay: selected.allDay,
+    //     note,
+    //   });
+    //   console.log("New Event: ", newEvent);
+    //   addNewEvent(newEvent);
+    // }
+
+    // addEventAlert.start = selected.startStr;
+    // addEventAlert.end = selected.endStr;
     const calendarApi = selected.view.calendar;
-    calendarApi.unselect();
-    const id = title+selected.startStr;
-    let newEvent = {
-      id: id,
-      title: title,
+    setAddEventAlert({
+      calApi: calendarApi,
       start: selected.startStr,
       end: selected.endStr,
-      note: note,
-    };
-    if (title) {
-      calendarApi.addEvent({
-        id,
-        title,
-        start: selected.startStr,
-        end: selected.endStr,
-        allDay: selected.allDay,
-        note,
-      });
-      console.log("New Event: ", newEvent);
-      addNewEvent(newEvent);
-    }
+      allDay: selected.allDay,
+      open: true,
+    });
+    calendarApi.unselect();
+    console.log("Selected: ", addEventAlert);
   };
 
   const handleEventClick = (selected) => {
@@ -203,11 +280,14 @@ const Calendar = () => {
       >
         <DialogTitle>{alert.title}</DialogTitle>
         <DialogContent dividers>
-          <DialogContentText>Date:                       {formatDate(alert.start, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}</DialogContentText>
+          <DialogContentText>
+            Date:{" "}
+            {formatDate(alert.start, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </DialogContentText>
           <DialogContentText>Note: {alert.info}</DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -219,6 +299,59 @@ const Calendar = () => {
           </Button>
         </DialogActions>
       </Dialog>
+    );
+  };
+
+  const renderAddEventDialog = () => {
+    return (
+      <Box
+      m={1}
+      //margin
+      display="flex"
+      justifyContent="flex-end"
+      alignItems="flex-end">
+      <Dialog
+        maxWidth="sm"
+        fullWidth
+        // TransitionProps={{ onEntered: handleEntered }}
+        open={addEventAlert.open}
+        // onClose={handleNo}
+      >
+        <DialogTitle>Add New Event</DialogTitle>
+        <DialogContent dividers style={{overflow: "hidden"}} >
+          <TextField
+            autoFocus
+            style={{ margin: 3 }}
+            label="Event title"
+            name="title"
+            onChange={handleTitleChange}
+            fullWidth
+          />
+          <TextField
+            autoFocus
+            style={{ margin: 3 }}
+            label="Note"
+            name="note"
+            multiline
+            rows={4}
+            onChange={handleNoteChange}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            ref={noButtonRef}
+            onClick={handleAddEventCancel}
+            color="error"
+          >
+            Cancel
+          </Button>
+          <Button onClick={handleAddEventSubmit} color="success">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+      </Box>
     );
   };
 
@@ -251,8 +384,8 @@ const Calendar = () => {
                     backgroundColor: colors.blueAccent[700],
                     color: "white",
                     "& .MuiListItemIcon-root": {
-                      color: "white"
-                    }
+                      color: "white",
+                    },
                   },
                 }}
                 // onClick={(key) => handleItemClick(key)}
@@ -286,6 +419,7 @@ const Calendar = () => {
         </Box>
 
         {renderEventDialog()}
+        {renderAddEventDialog()}
 
         {/* CALENDAR */}
         <Box flex="1 1 100%" ml="15px">
@@ -307,14 +441,11 @@ const Calendar = () => {
             selectable={true}
             selectMirror={true}
             dayMaxEvents={true}
-            // initialEvents = {fetchEventData}
             select={handleDateClick}
             eventClick={handleEventClick}
             eventsSet={(events) => setCurrentEvents(events)}
             ref={calendarRef}
             eventBorderColor={colors.primary[100]}
-            
-            
 
             // events={getCurrentEvents}
           />

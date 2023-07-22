@@ -214,8 +214,8 @@ const AddVolunteer = ({ addVolunteer, refresh }) => {
           />
 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DateField"]}>
-              <DateField
+            <DemoContainer components={["DatePicker"]}>
+              <DatePicker
                 label="License Exp"
                 value={volunteer.license_exp}
                 onChange={(newValue) => setLicenseExp(newValue)}
