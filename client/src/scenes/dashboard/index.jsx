@@ -1,27 +1,33 @@
 import Header from "../../components/Header";
 import { useState, useEffect } from "react";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import AccessTimeTwoToneIcon from "@mui/icons-material/AccessTimeTwoTone";
-import PieChart from "../../components/PieChart";
 import BarChart from "../../components/BarChart";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import HomeWorkTwoToneIcon from "@mui/icons-material/HomeWorkTwoTone";
 
-//TODO: Fix Grid/Create more widgets
+/**
+ * This components renders the Dashboard with analytic grid and widgets
+ */
 const Dashboard = () => {
+
+  // Import theme and color palette
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [hours, setHours] = useState("");
-  const [recentVolunteers, setRecentVolunteers] = useState([]);
-  const [topHours, setTopHours] = useState([]);
-  const [licensures, setLicensures] = useState([]);
-  const [volunteerCount, setVolunteerCount] = useState([]);
-  const [siteCount, setSiteCount] = useState([]);
 
+  const [hours, setHours] = useState(""); //store total volunteer hours
+  const [recentVolunteers, setRecentVolunteers] = useState([]); // store most recent volunteers
+  const [topHours, setTopHours] = useState([]); // store top volunteers by hours
+  const [licensures, setLicensures] = useState([]); // May not be neccesary, possibly just use barchart component
+  const [volunteerCount, setVolunteerCount] = useState([]); // store total volunteers
+  const [siteCount, setSiteCount] = useState([]); // store total sites
+
+  /**
+   * Retrieve the total hours volunteerd from database
+   */
   const fetchTotalHours = () => {
     console.log("Fetching License");
-    // const token = Cookies.get("XSRF-TOKEN");
     fetch(`http://localhost:5000/stats/totalHours`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
@@ -41,9 +47,11 @@ const Dashboard = () => {
       });
   };
 
+  /**
+   * Retrieve the 5 most recently added volunteers from database
+   */
   const fetchRecentVolunteers = () => {
     console.log("Fetching Recent Volunteers");
-    // const token = Cookies.get("XSRF-TOKEN");
     fetch(`http://localhost:5000/stats/recentVolunteers`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
@@ -57,9 +65,11 @@ const Dashboard = () => {
       });
   };
 
+  /**
+   * Fetch the count of all different licensures in the system
+   */
   const fetchLicensures = () => {
     console.log("Fetching Licensures");
-    // const token = Cookies.get("XSRF-TOKEN");
     fetch(`http://localhost:5000/stats/licenseCount`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
@@ -73,9 +83,11 @@ const Dashboard = () => {
       });
   };
 
+  /**
+   * Fetch the 5 top volunteers by total hours volunteered
+   */
   const fetchTopHours = () => {
     console.log("Fetching Top Volunteers");
-    // const token = Cookies.get("XSRF-TOKEN");
     fetch(`http://localhost:5000/stats/topHours`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
@@ -89,9 +101,11 @@ const Dashboard = () => {
       });
   };
 
+  /**
+   * Fetch count of all volunteers in the system
+   */
   const fetchVolunteerCount = () => {
     console.log("Fetching Volunteer Count");
-    // const token = Cookies.get("XSRF-TOKEN");
     fetch(`http://localhost:5000/stats/volunteerCount`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
@@ -105,9 +119,11 @@ const Dashboard = () => {
       });
   };
 
+  /**
+   * Fetch count of all sites in the system
+   */
   const fetchSiteCount = () => {
     console.log("Fetching Volunteer Count");
-    // const token = Cookies.get("XSRF-TOKEN");
     fetch(`http://localhost:5000/stats/siteCount`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
@@ -121,6 +137,9 @@ const Dashboard = () => {
       });
   };
 
+  /**
+   * useEffect hook to call all fetch functions for widgets
+   */
   useEffect(() => {
     fetchTotalHours();
     fetchRecentVolunteers();
@@ -132,18 +151,19 @@ const Dashboard = () => {
 
   return (
     <Box m="20px">
-      {/* HEADER */}
+      {/* Header section */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="DASHBOARD" subtitle="Welcome MRC Coordinator!" />
       </Box>
 
-      {/* Grid */}
+      {/* Grid section */}
       <Box
         display="grid"
         gridTemplateColumns="repeat(10, 1fr)"
         gridAutoRows="140px"
         gap="20px"
       >
+        {/* Row 1, Column 1 widget to display top volunteers by hour */}
         <Box
           gridColumn="span 2"
           gridRow="span 4"
@@ -160,7 +180,11 @@ const Dashboard = () => {
             colors={colors.grey[100]}
             p="15px"
           >
-            <Typography color={colors.greenAccent[400]} variant="h5" fontWeight="600">
+            <Typography
+              color={colors.greenAccent[400]}
+              variant="h5"
+              fontWeight="600"
+            >
               Top Volunteers by Hour
             </Typography>
           </Box>
@@ -187,7 +211,7 @@ const Dashboard = () => {
           ))}
         </Box>
 
-        {/* ROW 3 */}
+        {/* Row 1, column 3 start - display a barchart of all licenses */}
         <Box
           gridColumn="span 6"
           gridRow="span 3"
@@ -196,7 +220,11 @@ const Dashboard = () => {
           borderRadius={"16px"}
           sx={{ boxShadow: "2" }}
         >
-          <Typography variant="h5" fontWeight="600" color={colors.greenAccent[400]}>
+          <Typography
+            variant="h5"
+            fontWeight="600"
+            color={colors.greenAccent[400]}
+          >
             Licensures
           </Typography>
           <Box height="300px">
@@ -212,6 +240,7 @@ const Dashboard = () => {
           </Typography>
         </Box>
 
+        {/* Row 1, column 6 - display most recently added volunteers */}
         <Box
           gridColumn="span 2"
           gridRow="span 4"
@@ -228,7 +257,11 @@ const Dashboard = () => {
             colors={colors.grey[100]}
             p="15px"
           >
-            <Typography color={colors.greenAccent[400]} variant="h5" fontWeight="600">
+            <Typography
+              color={colors.greenAccent[400]}
+              variant="h5"
+              fontWeight="600"
+            >
               Recently Added Volunteers
             </Typography>
           </Box>
@@ -258,6 +291,7 @@ const Dashboard = () => {
             </Box>
           ))}
         </Box>
+        {/* Second row - total volunteer hours */}
         <Box
           gridColumn="span 2"
           gridRow="span 1"
@@ -295,6 +329,7 @@ const Dashboard = () => {
           </Box>
         </Box>
 
+        {/* Row 2 - total volunteers in system */}
         <Box
           gridColumn="span 2"
           gridRow="span 1"
@@ -332,6 +367,7 @@ const Dashboard = () => {
           </Box>
         </Box>
 
+        {/* Row 2, total sites in system */}
         <Box
           gridColumn="span 2"
           gridRow="span 1"

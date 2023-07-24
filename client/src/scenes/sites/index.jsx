@@ -13,6 +13,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 
+/**
+ * Sites component renders a Data Grid of all the sites in the system
+ */
 const Sites = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -24,7 +27,9 @@ const Sites = () => {
     open: false,
   });
 
-  // Fetch all Sites from database
+  /**
+   * Fetch all site data from database, store in "sites" state
+   */
   const fetchSiteData = () => {
     console.log("Fetching Sites");
 
@@ -41,6 +46,10 @@ const Sites = () => {
       });
   };
 
+  /**
+   * The addSite function will do a fetch to the database to POST new site
+   * @param {Object} site The site to be INSERT into database
+   */
   const addSite = (site) => {
     fetch(`http://localhost:5000/site/new`, {
       method: "POST",
@@ -60,7 +69,10 @@ const Sites = () => {
       });
   };
 
-  // Fetch call to delete a volunteer by ID
+/**
+ * The deleteSite function will to a DELETE fetch to database to delete a site by ID
+ * @param {number} id The site ID to be deleted from database
+ */
   const deleteSite = (id) => {
     console.log("Deleting Site ID: " + id);
     fetch(`http://localhost:5000/site/delete/${id}`, {
@@ -89,11 +101,13 @@ const Sites = () => {
     fetchSiteData();
   }, []);
 
-  // Fetch to process/save an update to row/volunteer
+/**
+ * The following functions handle updating changes to a site row in Data Grid
+ * Will do a fetch PUT to update database if any changes are made
+ */
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow };
 
-    //handle send data to api
     fetch(`http://localhost:5000/site/update/${updatedRow.site_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -220,10 +234,6 @@ const Sites = () => {
   return (
     <Box m="20px">
       <Header title="SITES"></Header>
-      {/* <div style={{ width: "100%" }}>
-        For DEBUG: display state.<br></br>
-        {JSON.stringify(sites)}
-      </div> */}
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -232,10 +242,8 @@ const Sites = () => {
             border: "none",
           },
           "& .MuiDataGrid-cell": {
-            // borderBottom: "none",
           },
           "& .name-column--cell": {
-            // color: colors.greenAccent[400],
             fontWeight: "bold",
           },
           "& .MuiDataGrid-columnHeaders": {

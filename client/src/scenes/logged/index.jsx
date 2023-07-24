@@ -5,6 +5,9 @@ import Header from "../../components/Header";
 import { useState, useEffect } from "react";
 import AddLog from "./AddLog";
 
+/**
+ * Logs renders all Volunteer Log information
+ */
 const Logs = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -12,11 +15,11 @@ const Logs = () => {
   const [volunteers, setVolunteers] = useState(null);
   const [sites, setSites] = useState(null);
 
-  // Fetch all logs from database
+  /**
+   * Fetch all log information from database
+   */
   const fetchLogData = () => {
     console.log("Fetching Volunteers");
-    // const token = Cookies.get("XSRF-TOKEN");
-
     fetch(`http://localhost:5000/log`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
@@ -30,10 +33,11 @@ const Logs = () => {
       });
   };
 
+  /**
+   * Fetch all volunteer names from database
+   */
   const fetchVolunteers = () => {
     console.log("Fetching Volunteers");
-    // const token = Cookies.get("XSRF-TOKEN");
-
     fetch(`http://localhost:5000/volunteer/names`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
@@ -47,10 +51,11 @@ const Logs = () => {
       });
   };
 
+  /**
+   * Fetch all site names from database
+   */
   const fetchSites = () => {
     console.log("Fetching Sites");
-    // const token = Cookies.get("XSRF-TOKEN");
-
     fetch(`http://localhost:5000/site/names`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
@@ -64,7 +69,10 @@ const Logs = () => {
       });
   };
 
-  // Fetch call to add a new volunteer
+  /**
+   * The addLog function will do a POST fetch to add a new log to the database
+   * @param {Object} log The new log to be added
+   */
   const addLog = (log) => {
     fetch(`http://localhost:5000/log/new`, {
       method: "POST",
@@ -86,7 +94,7 @@ const Logs = () => {
       });
   };
 
-  // On load, fetch logs
+  // On load, fetch logs, site, and volunteer data
   useEffect(() => {
     fetchLogData();
     fetchVolunteers();
@@ -147,10 +155,6 @@ const Logs = () => {
   return (
     <Box m="20px">
       <Header title="Volunteer Logs"></Header>
-      {/* <div style={{ width: "100%" }}>
-        For DEBUG: display state.<br></br>
-        {JSON.stringify(logs)}
-      </div> */}
       <Box
         m="40px 0 0 0"
         height="75vh"

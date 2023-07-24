@@ -24,7 +24,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
-//TODO: Calendar needs work. Not working with backend. Maybe Drop sidebar
+/**
+ * Calendar component renders all events from database
+ */
 const Calendar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -51,6 +53,10 @@ const Calendar = () => {
   });
   const noButtonRef = useRef(null);
 
+  /**
+   * Fetch all event data from database, and call addEventLoad to use api to add all events to calendar
+   * @param {Object} api The underlying calendar api used for storing event info
+   */
   const fetchEventData = (api) => {
     let firstEvents = [];
     console.log("Fetching Events");
@@ -68,6 +74,9 @@ const Calendar = () => {
     return firstEvents;
   };
 
+  /**
+   * Add a new event to database with POST
+   */
   const addNewEvent = (event) => {
     fetch(`http://localhost:5000/event/new`, {
       method: "POST",
@@ -82,7 +91,10 @@ const Calendar = () => {
       });
   };
 
-  // Fetch call to delete a volunteer by ID
+  /**
+   * Delete an event from database by ID
+   * @param {string} id The event ID to delete
+   */
   const deleteEvent = (id) => {
     console.log("Deleting Event ID: " + id);
     fetch(`http://localhost:5000/event/delete/${id}`, {
@@ -111,6 +123,11 @@ const Calendar = () => {
   //   return events;
   // }
 
+  /**
+   * This function will take all events from the array, and add to the calendar for display
+   * @param {Object} api The underlying calendar API
+   * @param {Array} eventArray The array of all events fetched from database
+   */
   const addEventLoad = (api, eventArray) => {
     console.log(eventArray);
     eventArray.forEach((element) => api.addEvent(element));
@@ -125,15 +142,25 @@ const Calendar = () => {
     return currentEvents;
   };
 
+  /**
+   * Handle changes to an event title when adding
+   */
   const handleTitleChange = (event) => {
     addEventAlert.title = event.target.value;
     addEventAlert.id = addEventAlert.title + addEventAlert.start;
   };
 
+  /**
+   * Handle changes to event note when adding
+   */
   const handleNoteChange = (event) => {
     addEventAlert.note = event.target.value;
   };
 
+  /**
+   * Handle submission of new event, adding to local Calendar with API
+   * and adding to database, then reset state for adding new events
+   */
   const handleAddEventSubmit = () => {
     if (addEventAlert.title) {
       addEventAlert.calApi.addEvent({
@@ -165,6 +192,9 @@ const Calendar = () => {
     }
   };
 
+  /**
+   * Reset state if canceling event
+   */
   const handleAddEventCancel = () => {
     setAddEventAlert({
       id: "",
@@ -178,34 +208,12 @@ const Calendar = () => {
     });
   };
 
+  /**
+   * This handles when a date is clicked on calendar, a new event object is created,
+   * The handler then opens the alert for adding new event info to save to database
+   * @param {Object} selected The selected date clicked on Calendar
+   */
   const handleDateClick = (selected) => {
-    // const title = prompt("Enter event title:");
-    // const note = prompt("Enter event info/note:");
-    // const calendarApi = selected.view.calendar;
-    // calendarApi.unselect();
-    // const id = title+selected.startStr;
-    // let newEvent = {
-    //   id: id,
-    //   title: title,
-    //   start: selected.startStr,
-    //   end: selected.endStr,
-    //   note: note,
-    // };
-    // if (title) {
-    //   calendarApi.addEvent({
-    //     id,
-    //     title,
-    //     start: selected.startStr,
-    //     end: selected.endStr,
-    //     allDay: selected.allDay,
-    //     note,
-    //   });
-    //   console.log("New Event: ", newEvent);
-    //   addNewEvent(newEvent);
-    // }
-
-    // addEventAlert.start = selected.startStr;
-    // addEventAlert.end = selected.endStr;
     const calendarApi = selected.view.calendar;
     setAddEventAlert({
       calApi: calendarApi,
@@ -226,27 +234,7 @@ const Calendar = () => {
       info: selected.event.extendedProps.note,
       open: true,
     });
-
-    // console.log("Title: ", selected.event.title);
-    // console.log("ID: ", selected.event.id);
-    // console.log("Start: ", selected.event.start);
-    // console.log("End: ", selected.event.end)
-    // console.log("Extended: ", selected.event.extendedProps);
-    // console.log("Selected: ", selected)
-    // if (
-    //   window.confirm(
-    //     `Are you sure you want to delete the event '${selected.event.title}'`
-    //   )
-    // ) {
-    //   deleteEvent(selected.event.id);
-    //   selected.event.remove();
-    // }
   };
-
-  // const handleItemClick = (event) => {
-  //   console.log("Item Clicked ID: ", event);
-  //   return (<EventDialog event={event}/>);
-  // };
 
   // Volunteer Delete to handle cancel/no
   const handleNo = () => {
@@ -271,13 +259,7 @@ const Calendar = () => {
 
   const renderEventDialog = (event) => {
     return (
-      <Dialog
-        maxWidth="sm"
-        fullWidth
-        // TransitionProps={{ onEntered: handleEntered }}
-        open={alert.open}
-        onClose={handleNo}
-      >
+      <Dialog maxWidth="sm" fullWidth open={alert.open} onClose={handleNo}>
         <DialogTitle>{alert.title}</DialogTitle>
         <DialogContent dividers>
           <DialogContentText>
@@ -305,52 +287,53 @@ const Calendar = () => {
   const renderAddEventDialog = () => {
     return (
       <Box
-      m={1}
-      //margin
-      display="flex"
-      justifyContent="flex-end"
-      alignItems="flex-end">
-      <Dialog
-        maxWidth="sm"
-        fullWidth
-        // TransitionProps={{ onEntered: handleEntered }}
-        open={addEventAlert.open}
-        // onClose={handleNo}
+        m={1}
+        //margin
+        display="flex"
+        justifyContent="flex-end"
+        alignItems="flex-end"
       >
-        <DialogTitle>Add New Event</DialogTitle>
-        <DialogContent dividers style={{overflow: "hidden"}} >
-          <TextField
-            autoFocus
-            style={{ margin: 3 }}
-            label="Event title"
-            name="title"
-            onChange={handleTitleChange}
-            fullWidth
-          />
-          <TextField
-            autoFocus
-            style={{ margin: 3 }}
-            label="Note"
-            name="note"
-            multiline
-            rows={4}
-            onChange={handleNoteChange}
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            ref={noButtonRef}
-            onClick={handleAddEventCancel}
-            color="error"
-          >
-            Cancel
-          </Button>
-          <Button onClick={handleAddEventSubmit} color="success">
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog
+          maxWidth="sm"
+          fullWidth
+          // TransitionProps={{ onEntered: handleEntered }}
+          open={addEventAlert.open}
+          // onClose={handleNo}
+        >
+          <DialogTitle>Add New Event</DialogTitle>
+          <DialogContent dividers style={{ overflow: "hidden" }}>
+            <TextField
+              autoFocus
+              style={{ margin: 3 }}
+              label="Event title"
+              name="title"
+              onChange={handleTitleChange}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              style={{ margin: 3 }}
+              label="Note"
+              name="note"
+              multiline
+              rows={4}
+              onChange={handleNoteChange}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              ref={noButtonRef}
+              onClick={handleAddEventCancel}
+              color="error"
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleAddEventSubmit} color="success">
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     );
   };
@@ -360,7 +343,6 @@ const Calendar = () => {
       <Header title="Calendar" />
 
       <Box display="flex" justifyContent="space-between">
-        {/* CALENDAR SIDEBAR */}
         <Box
           flex="1 1 20%"
           backgroundColor={colors.primary[400]}
@@ -388,9 +370,6 @@ const Calendar = () => {
                     },
                   },
                 }}
-                // onClick={(key) => handleItemClick(key)}
-                // onClick={() => {handleItemClick(event)}}
-
                 onClick={() => {
                   setAlert({
                     id: event.id,
@@ -446,8 +425,6 @@ const Calendar = () => {
             eventsSet={(events) => setCurrentEvents(events)}
             ref={calendarRef}
             eventBorderColor={colors.primary[100]}
-
-            // events={getCurrentEvents}
           />
         </Box>
       </Box>

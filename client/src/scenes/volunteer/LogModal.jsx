@@ -79,8 +79,6 @@ const LogModal = ({ id, name }) => {
       });
   };
 
-
-
  /**
   * Column info for Data Grid
   */

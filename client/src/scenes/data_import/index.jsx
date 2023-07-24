@@ -5,9 +5,14 @@ import Papa from "papaparse";
 import Button from "@mui/material/Button";
 import Header from "../../components/Header";
 
+/**
+ * The DataImport renders a page with option to import volunteer data from a CSV file
+ */
 const DataImport = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  // Store parsed file data to state
   const [parsedData, setParsedData] = useState([]);
 
   //State to store table Column name
@@ -16,6 +21,9 @@ const DataImport = () => {
   //State to store the values
   const [values, setValues] = useState([]);
 
+  /**
+   * This function handles the file added, to parse data to JSON
+   */
   const changeHandler = (event) => {
     // Passing file data (event.target.files[0]) to parse using Papa.parse
     Papa.parse(event.target.files[0], {
@@ -43,6 +51,7 @@ const DataImport = () => {
     });
   };
 
+  // Console log parsedData state
   const printParsedState = () => {
     console.log(parsedData);
   };
@@ -83,7 +92,6 @@ const DataImport = () => {
         phone, zipcode, licensure, license_num, license_exp
       </Box>
 
-
       <input
         type="file"
         name="file"
@@ -101,39 +109,39 @@ const DataImport = () => {
           Add Volunteers
         </Button>
         <Button
-        variant="contained"
-        color="secondary"
-        sx={{ height: 40 }}
-        onClick={printParsedState}
-      >
-        Console Log State
-      </Button>
+          variant="contained"
+          color="secondary"
+          sx={{ height: 40 }}
+          onClick={printParsedState}
+        >
+          Console Log State
+        </Button>
       </Box>
 
       <br />
       <br />
       {/* Table */}
-      <Box textAlign="center" >
-      <table style={{width: "100%", border: "2px solid black"}}>
-        <thead>
-          <tr >
-            {tableRows.map((rows, index) => {
-              return <th key={index}>{rows}</th>;
+      <Box textAlign="center">
+        <table style={{ width: "100%", border: "2px solid black" }}>
+          <thead>
+            <tr>
+              {tableRows.map((rows, index) => {
+                return <th key={index}>{rows}</th>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {values.map((value, index) => {
+              return (
+                <tr key={index}>
+                  {value.map((val, i) => {
+                    return <td key={i}>{val}</td>;
+                  })}
+                </tr>
+              );
             })}
-          </tr>
-        </thead>
-        <tbody>
-          {values.map((value, index) => {
-            return (
-              <tr key={index}>
-                {value.map((val, i) => {
-                  return <td key={i}>{val}</td>;
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
       </Box>
     </Box>
   );

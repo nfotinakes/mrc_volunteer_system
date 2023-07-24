@@ -20,6 +20,9 @@ import { DateField } from "@mui/x-date-pickers/DateField";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
 
+/**
+ * AddLog component renders the dialog for adding a new site to database
+ */
 const AddLog = ({ volunteers, sites, addLog }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -36,12 +39,15 @@ const AddLog = ({ volunteers, sites, addLog }) => {
     note: null,
   });
 
+  // Store dialog state for visible or not
   const [dialog, setDialog] = useState({ open: false });
 
+  // Toggle visible state
   const handleClickOpen = () => {
     setDialog({ open: true });
   };
 
+  // Handle closing dialog, reset state values
   const handleClose = () => {
     setLog({
       volunteer_id: null,
@@ -56,6 +62,10 @@ const AddLog = ({ volunteers, sites, addLog }) => {
     setDialog({ open: false });
   };
 
+  /**
+   * handleSubmit handles logic to add the new log to database,
+   * uses fetch call passed from parent, checking for valid input values
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     // Perform any necessary form submission logic here
@@ -69,7 +79,6 @@ const AddLog = ({ volunteers, sites, addLog }) => {
       addLog(log);
       console.log("Form submitted:", log);
     }
-
     setLog({
       volunteer_id: null,
       site_id: null,
@@ -83,6 +92,9 @@ const AddLog = ({ volunteers, sites, addLog }) => {
     setDialog({ open: false });
   };
 
+  /**
+   * The following functions are handlers for input field value changes
+   */
   const handleEmailChange = (event) => {
     log.volunteer_id = event.target.value;
     setVolunteerSelected(event.target.value);
@@ -140,17 +152,13 @@ const AddLog = ({ volunteers, sites, addLog }) => {
           "& .MuiDialog-container": {
             "& .MuiPaper-root": {
               width: "100%",
-              maxWidth: "500px", // Set your width here
+              maxWidth: "500px", 
             },
           },
         }}
       >
         <DialogTitle>Add Log</DialogTitle>
         <DialogContent style={{ paddingTop: 20 }}>
-          {/* <div style={{ width: "100%" }}>
-        From index:<br></br>
-        {JSON.stringify(volunteers)}
-      </div> */}
           <FormControl fullWidth>
             <InputLabel>Select Volunteer</InputLabel>
             <Select
@@ -175,9 +183,8 @@ const AddLog = ({ volunteers, sites, addLog }) => {
             </Select>
             {/* <FormHelperText>First Name, Last Name, & Email</FormHelperText> */}
           </FormControl>
-          <br/>
-          <br/>
-          
+          <br />
+          <br />
 
           <FormControl fullWidth>
             <InputLabel>Select Site</InputLabel>
