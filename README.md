@@ -44,9 +44,9 @@
 
 ![Dashboard Screnshot](https://i.imgur.com/Fj5BTXj.png)
 
-The Medical Reserve Corp is a federal program of around 800 units and over 300,000 trained volunteers who assist with public health efforts throughout our communities. These efforts range from increasing public health literacy, prevention support, and eliminating health disparities, to disaster and emergency response support, such as during disease outbreaks, earthquakes, and floods. An organized and efficient system to contact and sort volunteer data can be essential for quickly mobilizing vital health volunteers when community first responders need support. 
+&emsp;The Medical Reserve Corp is a federal program of around 800 units and over 300,000 trained volunteers who assist with public health efforts throughout our communities. These efforts range from increasing public health literacy, prevention support, and eliminating health disparities, to disaster and emergency response support, such as during disease outbreaks, earthquakes, and floods. An organized and efficient system to contact and sort volunteer data can be essential for quickly mobilizing vital health volunteers when community first responders need support. 
 
-Funding and grants for local MRC units are often limited or competitive, which means MRC unit coordinators are often forced to develop their own systems for managing their local MRC volunteer network. Funds cannot usually be allocated to the development of specialized systems or purchasing pre-existing volunteer tracking software. The goal of the MRC Volunteer System is to provide a base full-stack web application for any MRC unit coordinator to use as a volunteer network management tool. This system will provide the means to store, edit, and organize all necessary information on volunteers, volunteer sites, and volunteer logs. Additional features include volunteer network analytics, CSV import capabilities, calendar event/note storage, and with this source code, the ability to customize as one sees fit! 
+&emsp;Funding and grants for local MRC units are often limited or competitive, which means MRC unit coordinators are often forced to develop their own systems for managing their local MRC volunteer network. Funds cannot usually be allocated to the development of specialized systems or purchasing pre-existing volunteer tracking software. The goal of the MRC Volunteer System is to provide a base full-stack web application for any MRC unit coordinator to use as a volunteer network management tool. This system will provide the means to store, edit, and organize all necessary information on volunteers, volunteer sites, and volunteer logs. Additional features include volunteer network analytics, CSV import capabilities, calendar event/note storage, and with this source code, the ability to customize as one sees fit! 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -59,6 +59,8 @@ Funding and grants for local MRC units are often limited or competitive, which m
 * [![Node.js][Node.js]][Node-url]
 * [![Express][Express]][Express-url]
 
+The following sections will provide documentation and specifics on all aspects of the system, including database design, server and API specifics, and client-side functionality. See the table of contents at the top of the file for easy navigation to any section of this file. 
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -66,15 +68,67 @@ Funding and grants for local MRC units are often limited or competitive, which m
 <!-- GETTING STARTED -->
 ## Database
 
-Write some info about the database, where to find schema folder, mock data, etc
+The MRC Volunteer System uses a relational database built with MySQL. To create the database schema, the associated file can be found in the project directory at:
+```sh
+server/data/mrc_volunteer.sh
+```
+Further detailed information on the database can be found in the following sections:
+
 
 ### ER Diagram
 
-Add ER Diagram image here
+![ER Diagram](https://i.imgur.com/ur2vaw8.png)
 
 ### Table Info
+volunteer
+| Data Item | Type | Description |
+| --- | --- | --- |
+| volunteer_id | Integer | The volunteer's unique ID (Primary Key) |
+| first_name | String | Volunteer first name |
+| last_name | String | Volunteer last name |
+| email | String | Volunteer email address (must be unique) |
+| phone | String | Volunteer phone number |
+| zipcode| String | Volunteer zipcode |
+| status | Integer | Volunteer active status (active = 1, inactive = 0) |
+| input_date | Datetime | Date volunteer was registered to system |
+| licensure | String | Volunteer license type |
+| license_num | String | Volunteer license number |
+| license_exp | Datetime | Volunteer license expiration date |
 
-Put specific Table Info HERE
+<br />
+
+site
+| Data Item | Type | Description |
+| --- | --- | --- |
+| site_id | Integer | The Site's unique ID (Primary Key) |
+| site_name | String | Site name |
+| city | String | City site is located |
+| zipcode| String | Site city's zipcode |
+| note | String | Optional field for a note or additional site info |
+
+<br />
+
+log 
+| Data Item | Type | Description |
+| --- | --- | --- |
+| log_id | Integer | The Log's unique ID (Primary Key) |
+| volunteer_id | Integer | The volunteer ID associated with the log (Foreign Key) |
+| site_id | Integer | The site ID associated with the log (Foreign Key) |
+| date | Datetime | Date of volunteer log |
+| hours | Integer | The hours logged by volunteer |
+| role | String | Volunteers role for the log |
+| note | String | Optional field for a note or additional log info |
+
+<br />
+
+event
+| Data Item | Type | Description |
+| --- | --- | --- |
+| id | String | Event unique ID (generated on frontend creation (Title + Date) |
+| title | String | Event title |
+| start | String | Event starting datetime (conversion handled in frontend) |
+| end | String | Event ending datetime (conversion handled in frontend) |
+| note | String | Optional field for a note or additional event info |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
