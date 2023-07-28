@@ -20,24 +20,24 @@ const Volunteer = () => {
   /**
    * Theme and color imports
    */
-  const theme = useTheme(); 
+  const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const noButtonRef = useRef(null);
-  const [volunteers, setVolunteers] = useState([]);  // Store all volunteers
-  const [snackbar, setSnackbar] = useState(null);    // Store snackbar alerts
+  const [volunteers, setVolunteers] = useState([]); // Store all volunteers
+  const [snackbar, setSnackbar] = useState(null); // Store snackbar alerts
   const [alert, setAlert] = useState({
     id: null,
     open: false,
   });
   const [selectedRows, setSelectedRows] = useState([]); // Store selected rows for Email Mailto
 
-    /**
-     * useEffect hook to fetch all volunteer data after render/update
-     */
-    useEffect(() => {
-      fetchVolunteerData();
-    }, []);
+  /**
+   * useEffect hook to fetch all volunteer data after render/update
+   */
+  useEffect(() => {
+    fetchVolunteerData();
+  }, []);
 
   /**
    * Fetch all volunteer data from database and set to state
@@ -59,7 +59,7 @@ const Volunteer = () => {
 
   /**
    * Delete a volunteer from the database, then refresh state
-   * @param {number} id Volunteer unique ID 
+   * @param {number} id Volunteer unique ID
    */
   const deleteVolunteer = (id) => {
     console.log("Deleting Volunteer ID: " + id);
@@ -108,10 +108,9 @@ const Volunteer = () => {
   };
 
   /**
-   * The following functions handle changes to a volunteer/row in the Data Grid 
+   * The following functions handle changes to a volunteer/row in the Data Grid
    */
 
-  
   /**
    * Datagrid row update on change, calls database with fetch by volunteer ID
    * @param {row} newRow The row/volunteer to be updated
@@ -120,27 +119,32 @@ const Volunteer = () => {
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow };
 
-    fetch(`http://localhost:5000/volunteer/update/${updatedRow.volunteer_id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedRow),
-    })
-      .then((res) => {
-        console.log(res);
-        setSnackbar({
-          children: "Volunteer Updated!",
-          severity: "success",
+    if (window.confirm(`Are you sure you want to edit the volunteer?`)) {
+      fetch(
+        `http://localhost:5000/volunteer/update/${updatedRow.volunteer_id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedRow),
+        }
+      )
+        .then((res) => {
+          console.log(res);
+          setSnackbar({
+            children: "Volunteer Updated!",
+            severity: "success",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          setSnackbar({
+            children: "Volunteer Update Error!",
+            severity: "error",
+          });
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        setSnackbar({
-          children: "Volunteer Update Error!",
-          severity: "error",
-        });
-      });
 
-    return newRow;
+      return newRow;
+    }
   };
 
   // Handle an error on row update/Volunteer edit
@@ -365,7 +369,10 @@ const Volunteer = () => {
       >
         {renderConfirmDialog()}
 
-        <AddVolunteer addVolunteer={addVolunteer} refresh={fetchVolunteerData} />
+        <AddVolunteer
+          addVolunteer={addVolunteer}
+          refresh={fetchVolunteerData}
+        />
 
         <Box
           m={1}

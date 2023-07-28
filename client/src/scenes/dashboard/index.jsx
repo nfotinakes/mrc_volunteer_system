@@ -48,7 +48,7 @@ const Dashboard = () => {
   };
 
   /**
-   * Retrieve the 5 most recently added volunteers from database
+   * Retrieve the 6 most recently added volunteers from database
    */
   const fetchRecentVolunteers = () => {
     console.log("Fetching Recent Volunteers");
@@ -84,7 +84,7 @@ const Dashboard = () => {
   };
 
   /**
-   * Fetch the 5 top volunteers by total hours volunteered
+   * Fetch the 6 top volunteers by total hours volunteered
    */
   const fetchTopHours = () => {
     console.log("Fetching Top Volunteers");

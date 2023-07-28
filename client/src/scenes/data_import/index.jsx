@@ -25,7 +25,9 @@ const DataImport = () => {
    * This function handles the file added, to parse data to JSON
    */
   const changeHandler = (event) => {
-    // Passing file data (event.target.files[0]) to parse using Papa.parse
+
+    if(event.target.files[0]) {
+ // Passing file data (event.target.files[0]) to parse using Papa.parse
     Papa.parse(event.target.files[0], {
       header: true,
       skipEmptyLines: true,
@@ -49,12 +51,22 @@ const DataImport = () => {
         setValues(valuesArray);
       },
     });
+
+    }
+   
   };
 
   // Console log parsedData state
   const printParsedState = () => {
     console.log(parsedData);
   };
+
+  const clearData = () => {
+    setParsedData([]);
+    setTableRows([]);
+    setValues([]);
+    console.log(parsedData);
+  }
 
   const submitImported = () => {
     parsedData.forEach((volunteer) => addVolunteers(volunteer));
@@ -111,10 +123,18 @@ const DataImport = () => {
         <Button
           variant="contained"
           color="secondary"
-          sx={{ height: 40 }}
+          sx={{ height: 40, margin: 1 }}
           onClick={printParsedState}
         >
           Console Log State
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          sx={{ height: 40, margin: 1 }}
+          onClick={clearData}
+        >
+          Clear Data
         </Button>
       </Box>
 
