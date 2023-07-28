@@ -93,6 +93,22 @@ router.put("/update/:volid/:siteid", async (req, res) => {
     let rows = executeSQL(sql, params);
     res.send("Log Updated");
   });
+
+  // Delete single log by ID
+router.delete("/delete/:id", async (req, res) => {
+  console.log("Delete Log request received");
+  try {
+    let id = req.params.id;
+    let sql = `DELETE FROM log WHERE log_id = ?`;
+    params = [id];
+    let rows = await executeSQL(sql, params);
+    res.status(200).json(rows);
+  } catch (err) {
+    console.log("Error deleting volunteer: " + err);
+  }
+});
+
+
 async function executeSQL(sql, params) {
     return new Promise(function (resolve, reject) {
       pool.query(sql, params, function (err, rows, fields) {
