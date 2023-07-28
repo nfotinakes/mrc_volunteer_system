@@ -137,7 +137,152 @@ event
 <!-- Server -->
 ## Server
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+The server routes are organized in the subdirectory `server/routes` routed from the `index.js` file to `Stats`, `Volunteer`, `Site`, and `Event` subfolders/routes.
+
+This section will detail the endpoints and corresponded actions/response data from each REST endpoint.
+
+### Stats
+---
+
+```sh
+#Returns the sum of all volunteer hours logged in the system.
+GET /stats/totalHours 
+```
+ Example response:
+```json
+[
+    {
+        "total_hours": "100"
+    }
+]
+```
+---
+```sh
+#Returns the six most recent volunteers added to the system.
+GET /stats/recentVolunteers
+```
+Example response (first two only included):
+```json
+[
+    {
+        "volunteer_id": 33,
+        "first_name": "Ron",
+        "last_name": "Hammers",
+        "input_date": "2023-07-23T07:00:00.000Z"
+    },
+    {
+        "volunteer_id": 32,
+        "first_name": "John",
+        "last_name": "Jacobs",
+        "input_date": "2023-07-23T07:00:00.000Z"
+    },
+```
+---
+```sh
+#Returns the count of each type of license in the system.
+GET /stats/licenseCount
+```
+Example response (first two only included):
+```json
+[
+    {
+        "Total": 8,
+        "licensure": "MD"
+    },
+    {
+        "Total": 3,
+        "licensure": "RN"
+    },
+```
+---
+```sh
+#Returns the top 6 volunteers by total hours logged.
+GET /stats/topHours
+```
+Example response (first two only included):
+```json
+[
+    {
+        "volunteer_id": 7,
+        "first_name": "Molly",
+        "last_name": "Olson",
+        "total_hours": "30",
+        "total_logs": 6
+    },
+    {
+        "volunteer_id": 11,
+        "first_name": "Eddie",
+        "last_name": "Curry",
+        "total_hours": "20",
+        "total_logs": 3
+    },
+```
+---
+```sh
+#Returns the sum of all volunteers in the system
+GET /stats/volunteerCount
+```
+Example response:
+```json
+[
+    {
+        "total_volunteers": 34
+    }
+]
+```
+---
+```sh
+#Returns the sum of all sites in the system
+GET /stats/siteCount
+```
+Example response:
+```json
+[
+    {
+        "total_sites": 10
+    }
+]
+```
+
+### Volunteer
+---
+```sh
+# Get all volunteer data in system
+GET /volunteer
+```
+Example response (only first volunteer shown):
+```json
+[
+    {
+        "volunteer_id": 1,
+        "first_name": "Tom",
+        "last_name": "Jones",
+        "email": "tjones@gmail.com",
+        "phone": "(805) 555-9645",
+        "zipcode": "93465",
+        "status": 0,
+        "input_date": "2022-01-17T08:00:00.000Z",
+        "licensure": "MD",
+        "license_num": "MD6745",
+        "license_exp": "2025-08-15T07:00:00.000Z"
+    },
+```
+---
+```sh
+# Delete a volunteer data from the system by volunteer_id primary key
+DELETE /volunteer/{volunteer_id}
+```
+---
+```sh
+# Add a new volunteer to the system
+POST /volunteer/new
+```
+---
+```sh
+# Update an existing volunteer in the system
+PUT /volunteer/update/{volunteer_id}
+```
+
 
 
 
