@@ -139,16 +139,14 @@ event
 
 The server routes are organized in the subdirectory `server/routes` routed from the `index.js` file to `Stats`, `Volunteer`, `Site`, and `Event` subfolders/routes.
 
-This section will detail the endpoints and corresponded actions/response data from each REST endpoint.
+This section will detail the endpoints and corresponding actions/response data from each REST endpoint.
 
 ### Stats
----
-
+Return the sum of all volunteer hours logged in the system.
 ```sh
-#Returns the sum of all volunteer hours logged in the system.
 GET /stats/totalHours 
 ```
- Example response:
+Example response:
 ```json
 [
     {
@@ -157,11 +155,11 @@ GET /stats/totalHours
 ]
 ```
 ---
+Return the six most recent volunteers added to the system.
 ```sh
-#Returns the six most recent volunteers added to the system.
 GET /stats/recentVolunteers
 ```
-Example response (first two only included):
+Example response (only the first two shown):
 ```json
 [
     {
@@ -178,11 +176,11 @@ Example response (first two only included):
     },
 ```
 ---
+Return the count of each type of license in the system.
 ```sh
-#Returns the count of each type of license in the system.
 GET /stats/licenseCount
 ```
-Example response (first two only included):
+Example response (only the first two shown):
 ```json
 [
     {
@@ -195,11 +193,11 @@ Example response (first two only included):
     },
 ```
 ---
+Returns the top 6 volunteers by total hours logged.
 ```sh
-#Returns the top 6 volunteers by total hours logged.
 GET /stats/topHours
 ```
-Example response (first two only included):
+Example response (only the first two shown):
 ```json
 [
     {
@@ -218,8 +216,8 @@ Example response (first two only included):
     },
 ```
 ---
+Return the sum of all volunteers in the system.
 ```sh
-#Returns the sum of all volunteers in the system
 GET /stats/volunteerCount
 ```
 Example response:
@@ -231,8 +229,8 @@ Example response:
 ]
 ```
 ---
+Returns the sum of all sites in the system.
 ```sh
-#Returns the sum of all sites in the system
 GET /stats/siteCount
 ```
 Example response:
@@ -243,11 +241,10 @@ Example response:
     }
 ]
 ```
-
-### Volunteer
 ---
+### Volunteer
+Return all volunteers from database.
 ```sh
-# Get all volunteer data in system
 GET /volunteer
 ```
 Example response (only first volunteer shown):
