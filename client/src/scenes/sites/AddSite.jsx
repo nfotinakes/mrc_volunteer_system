@@ -9,7 +9,7 @@ import { Alert, Box, useTheme } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import { tokens } from "../../theme";
 
-const AddSite = ({ addSite }) => {
+const AddSite = ({ addSite, refresh }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [snackbar, setSnackbar] = useState(null);

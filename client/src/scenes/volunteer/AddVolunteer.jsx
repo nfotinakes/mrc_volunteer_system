@@ -5,13 +5,14 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { Box, useTheme } from "@mui/material";
+import { Alert, Box, useTheme } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
 import { tokens } from "../../theme";
+import Snackbar from "@mui/material/Snackbar";
 
 /**
  * AddVolunteer component renders the dialog for adding a new volunteer to the database.
@@ -21,6 +22,9 @@ import { tokens } from "../../theme";
 const AddVolunteer = ({ addVolunteer, refresh }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode); // If theme colors needed
+  const [snackbar, setSnackbar] = useState(null); // Store snackbar alerts
+
+  const handleCloseSnackbar = () => setSnackbar(null);
 
   // Store volunteer info to be added in state
   const [volunteer, setVolunteer] = useState({
@@ -99,7 +103,10 @@ const AddVolunteer = ({ addVolunteer, refresh }) => {
       !volunteer.license_num ||
       !volunteer.license_exp
     ) {
-      alert("Field has been left blank!");
+      setSnackbar({
+        children: "Field has been left blank!",
+        severity: "error",
+      });
     } else {
       console.log("Form submitted:", volunteer);
       addVolunteer(volunteer);
@@ -117,6 +124,10 @@ const AddVolunteer = ({ addVolunteer, refresh }) => {
       });
       setInputDate(null);
       setLicenseExp(null);
+      setSnackbar({
+        children: "Volunteer successfully added",
+        severity: "success",
+      });
       setDialog({ open: false });
     }
     refresh();
@@ -256,6 +267,16 @@ const AddVolunteer = ({ addVolunteer, refresh }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      {!!snackbar && (
+          <Snackbar
+            open
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            onClose={handleCloseSnackbar}
+            autoHideDuration={6000}
+          >
+            <Alert {...snackbar} onClose={handleCloseSnackbar} />
+          </Snackbar>
+        )}
     </div>
   );
 };

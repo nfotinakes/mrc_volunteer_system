@@ -153,9 +153,14 @@ const Logs = () => {
       cellClassName: "name-column--cell",
     },
     {
+      field: "email",
+      headerName: "Email",
+      flex: 0.75,
+    },
+    {
       field: "site_name",
       headerName: "Site Name",
-      flex: 1,
+      flex: .75,
       cellClassName: "site-name-column--cell",
     },
     {
@@ -293,7 +298,7 @@ const Logs = () => {
         }}
       >
         {renderConfirmDialog()}
-        <AddLog addLog={addLog} volunteers={volunteers} sites={sites}></AddLog>
+        <AddLog addLog={addLog} volunteers={volunteers} sites={sites} refresh={fetchLogData}></AddLog>
         <DataGrid
           getRowId={(row) => row.log_id}
           checkboxSelection

@@ -23,7 +23,7 @@ import dayjs from "dayjs";
 /**
  * AddLog component renders the dialog for adding a new site to database
  */
-const AddLog = ({ volunteers, sites, addLog }) => {
+const AddLog = ({ volunteers, sites, addLog, refresh }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [snackbar, setSnackbar] = useState(null);
@@ -90,6 +90,7 @@ const AddLog = ({ volunteers, sites, addLog }) => {
     setVolunteerSelected("");
     setSiteSelected("");
     setDialog({ open: false });
+    refresh();
   };
 
   /**

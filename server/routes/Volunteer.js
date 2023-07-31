@@ -30,7 +30,7 @@ router.get("/edit", async (req, res) => {
 // Get single volunteer info by ID
 router.get("/names", async (req, res) => {
   try {
-    let sql = `SELECT volunteer_id, first_name, last_name, email FROM volunteer`;
+    let sql = `SELECT volunteer_id, first_name, last_name, email FROM volunteer ORDER BY last_name ASC`;
     let rows = await executeSQL(sql);
     res.status(200).json(rows);
   } catch (err) {

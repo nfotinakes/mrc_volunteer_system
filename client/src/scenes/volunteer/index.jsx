@@ -1,7 +1,7 @@
 import { Alert, Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import Header from "../../components/Header";
 import Snackbar from "@mui/material/Snackbar";
@@ -31,6 +31,10 @@ const Volunteer = () => {
     open: false,
   });
   const [selectedRows, setSelectedRows] = useState([]); // Store selected rows for Email Mailto
+  
+  // Testing new UPDATE
+  const [promiseArguments, setPromiseArguments] = useState(null);
+  // const mutateRow = useFakeMutation();
 
   /**
    * useEffect hook to fetch all volunteer data after render/update
@@ -116,36 +120,36 @@ const Volunteer = () => {
    * @param {row} newRow The row/volunteer to be updated
    * @returns The updated row
    */
-  const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow };
+  // const processRowUpdate = (newRow) => {
+  //   const updatedRow = { ...newRow };
 
-    if (window.confirm(`Are you sure you want to edit the volunteer?`)) {
-      fetch(
-        `http://localhost:5000/volunteer/update/${updatedRow.volunteer_id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedRow),
-        }
-      )
-        .then((res) => {
-          console.log(res);
-          setSnackbar({
-            children: "Volunteer Updated!",
-            severity: "success",
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          setSnackbar({
-            children: "Volunteer Update Error!",
-            severity: "error",
-          });
-        });
+  //   if (window.confirm(`Are you sure you want to edit the volunteer?`)) {
+  //     fetch(
+  //       `http://localhost:5000/volunteer/update/${updatedRow.volunteer_id}`,
+  //       {
+  //         method: "PUT",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify(updatedRow),
+  //       }
+  //     )
+  //       .then((res) => {
+  //         console.log(res);
+  //         setSnackbar({
+  //           children: "Volunteer Updated!",
+  //           severity: "success",
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         setSnackbar({
+  //           children: "Volunteer Update Error!",
+  //           severity: "error",
+  //         });
+  //       });
 
-      return newRow;
-    }
-  };
+  //     return newRow;
+  //   }
+  // };
 
   // Handle an error on row update/Volunteer edit
   const handleProcessRowUpdateError = (error) => {
@@ -155,6 +159,115 @@ const Volunteer = () => {
       severity: "error",
     });
   };
+
+  //////////
+
+  function computeMutation(newRow, oldRow) {
+    // if (newRow.first_name !== oldRow.first_name) {
+    //   return `Name from '${oldRow.first_name}' to '${newRow.first_name}'`;
+    // }
+    // if (newRow.last_name !== oldRow.last_name) {
+    //   return `Name from '${oldRow.last_name}' to '${newRow.last_name}'`;
+    // }
+    // if (newRow.email !== oldRow.email) {
+    //   return `Age from '${oldRow.email || ""}' to '${newRow.email || ""}'`;
+    // }
+    // if (newRow.phone !== oldRow.phone) {
+    //   return `Age from '${oldRow.phone || ""}' to '${newRow.phone || ""}'`;
+    // }
+    // if (newRow.zipcode !== oldRow.zipcode) {
+    //   return `Zipcode from '${oldRow.zipcode || ""}' to '${newRow.zipcode || ""}'`;
+    // }
+    // if (newRow.status !== oldRow.status) {
+    //   return `Age from '${oldRow.status || ""}' to '${newRow.status || ""}'`;
+    // }
+    if(newRow !== oldRow) {
+      return `save changes to volunteer`
+    }
+    return null;
+  }
+
+  const processRowUpdate = useCallback(
+    (newRow, oldRow) =>
+      new Promise((resolve, reject) => {
+        const mutation = computeMutation(newRow, oldRow);
+        if (mutation) {
+          // Save the arguments to resolve or reject the promise later
+          setPromiseArguments({ resolve, reject, newRow, oldRow });
+        } else {
+          resolve(oldRow); // Nothing was changed
+        }
+      }),
+    []
+  );
+
+  const handleUpdateNo = () => {
+    const { oldRow, resolve } = promiseArguments;
+    resolve(oldRow); // Resolve with the old row to not update the internal state
+    setPromiseArguments(null);
+  };
+
+  const handleUpdateYes = async () => {
+    const { newRow, oldRow, reject, resolve } = promiseArguments;
+
+    try {
+      // Make the HTTP request to save in the backend
+      // const response = await mutateRow(newRow);
+      const response = await fetch(
+        `http://localhost:5000/volunteer/update/${oldRow.volunteer_id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newRow),
+        }
+      );
+      setSnackbar({ children: "Volunteer successfully updated", severity: "success" });
+      resolve(newRow);
+      console.log("Response", response);
+      setPromiseArguments(null);
+    } catch (error) {
+      setSnackbar({ children: "Error updating volunteer", severity: "error" });
+      reject(oldRow);
+      setPromiseArguments(null);
+    }
+  };
+
+  const handleUpdateEntered = () => {
+    // The `autoFocus` is not used because, if used, the same Enter that saves
+    // the cell triggers "No". Instead, we manually focus the "No" button once
+    // the dialog is fully open.
+    // noButtonRef.current?.focus();
+  };
+
+  const renderUpdateConfirmDialog = () => {
+    if (!promiseArguments) {
+      return null;
+    }
+
+    const { newRow, oldRow } = promiseArguments;
+    const mutation = computeMutation(newRow, oldRow);
+
+    return (
+      <Dialog
+        maxWidth="xs"
+        TransitionProps={{ onEntered: handleUpdateEntered }}
+        open={!!promiseArguments}
+      >
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent dividers>
+          {`Pressing 'Yes' will ${mutation}.`}
+        </DialogContent>
+        <DialogActions>
+          <Button ref={noButtonRef} onClick={handleUpdateNo}>
+            No
+          </Button>
+          <Button onClick={handleUpdateYes}>Yes</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  //////////
 
   /*
   Following functions are handlers for the Volunteer Delete Alert/Dialog
@@ -368,6 +481,7 @@ const Volunteer = () => {
         }}
       >
         {renderConfirmDialog()}
+        {renderUpdateConfirmDialog()}
 
         <AddVolunteer
           addVolunteer={addVolunteer}

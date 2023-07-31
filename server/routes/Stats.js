@@ -34,7 +34,7 @@ router.get("/licenseCount", async (req, res) => {
 
   router.get("/topHours", async (req, res) => {
     let sql = `SELECT v.volunteer_id, v.first_name, v.last_name, SUM(hours) AS total_hours, COUNT(l.volunteer_id) AS total_logs FROM mrc_volunteer.log AS l JOIN mrc_volunteer.volunteer AS v ON l.volunteer_id = v.volunteer_id GROUP BY v.volunteer_id ORDER BY total_hours DESC LIMIT 6;`;
-    let rows = await executeSQL(sql, params);
+    let rows = await executeSQL(sql);
     res.status(200).json(rows);
   });
 

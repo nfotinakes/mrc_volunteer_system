@@ -3,7 +3,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import AddSite from "./AddSite";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -26,6 +26,7 @@ const Sites = () => {
     id: null,
     open: false,
   });
+  const [promiseArguments, setPromiseArguments] = useState(null);
 
   /**
    * Fetch all site data from database, store in "sites" state
@@ -105,31 +106,31 @@ const Sites = () => {
  * The following functions handle updating changes to a site row in Data Grid
  * Will do a fetch PUT to update database if any changes are made
  */
-  const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow };
+  // const processRowUpdate = (newRow) => {
+  //   const updatedRow = { ...newRow };
 
-    fetch(`http://localhost:5000/site/update/${updatedRow.site_id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedRow),
-    })
-      .then((res) => {
-        console.log(res);
-        setSnackbar({
-          children: "Site Updated!",
-          severity: "success",
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        setSnackbar({
-          children: "Site Update Error!",
-          severity: "error",
-        });
-      });
+  //   fetch(`http://localhost:5000/site/update/${updatedRow.site_id}`, {
+  //     method: "PUT",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify(updatedRow),
+  //   })
+  //     .then((res) => {
+  //       console.log(res);
+  //       setSnackbar({
+  //         children: "Site Updated!",
+  //         severity: "success",
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       setSnackbar({
+  //         children: "Site Update Error!",
+  //         severity: "error",
+  //       });
+  //     });
 
-    return newRow;
-  };
+  //   return newRow;
+  // };
 
   // Handle an error on row update/Volunteer edit
   const handleProcessRowUpdateError = (error) => {
@@ -139,6 +140,99 @@ const Sites = () => {
       severity: "error",
     });
   };
+
+////
+function computeMutation(newRow, oldRow) {
+  if(newRow !== oldRow) {
+    return `save changes to site`
+  }
+  return null;
+};
+
+const processRowUpdate = useCallback(
+  (newRow, oldRow) =>
+    new Promise((resolve, reject) => {
+      const mutation = computeMutation(newRow, oldRow);
+      if (mutation) {
+        // Save the arguments to resolve or reject the promise later
+        setPromiseArguments({ resolve, reject, newRow, oldRow });
+      } else {
+        resolve(oldRow); // Nothing was changed
+      }
+    }),
+  []
+);
+
+const handleUpdateNo = () => {
+  const { oldRow, resolve } = promiseArguments;
+  resolve(oldRow); // Resolve with the old row to not update the internal state
+  setPromiseArguments(null);
+};
+
+const handleUpdateYes = async () => {
+  const { newRow, oldRow, reject, resolve } = promiseArguments;
+
+  try {
+    // Make the HTTP request to save in the backend
+    // const response = await mutateRow(newRow);
+    const response = await fetch(
+      `http://localhost:5000/site/update/${oldRow.site_id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newRow),
+      }
+    );
+    setSnackbar({ children: "Site successfully updated", severity: "success" });
+    resolve(newRow);
+    console.log("Response", response);
+    setPromiseArguments(null);
+  } catch (error) {
+    setSnackbar({ children: "Error updating site", severity: "error" });
+    reject(oldRow);
+    setPromiseArguments(null);
+  }
+};
+
+const handleUpdateEntered = () => {
+  // The `autoFocus` is not used because, if used, the same Enter that saves
+  // the cell triggers "No". Instead, we manually focus the "No" button once
+  // the dialog is fully open.
+  // noButtonRef.current?.focus();
+};
+
+
+const renderUpdateConfirmDialog = () => {
+  if (!promiseArguments) {
+    return null;
+  }
+
+  const { newRow, oldRow } = promiseArguments;
+  const mutation = computeMutation(newRow, oldRow);
+
+  return (
+    <Dialog
+      maxWidth="xs"
+      TransitionProps={{ onEntered: handleUpdateEntered }}
+      open={!!promiseArguments}
+    >
+      <DialogTitle>Are you sure?</DialogTitle>
+      <DialogContent dividers>
+        {`Pressing 'Yes' will ${mutation}.`}
+      </DialogContent>
+      <DialogActions>
+        <Button ref={noButtonRef} onClick={handleUpdateNo} color="error">
+          No
+        </Button>
+        <Button onClick={handleUpdateYes} color="success">Yes</Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+
+////
+
 
   /*
   Following functions are handlers for the Site Delete Alert/Dialog
@@ -156,6 +250,12 @@ const Sites = () => {
     setAlert({ id: null, open: false });
   };
   const handleEntered = () => {};
+
+
+    /*
+  Following function is for setting the the visiuble status of Snackbar alerts to close
+  */
+  const handleCloseSnackbar = () => setSnackbar(null);
 
   // Column info for datagrid
   const columns = [
@@ -266,7 +366,8 @@ const Sites = () => {
         }}
       >
         {renderConfirmDialog()}
-        <AddSite addSite={addSite}></AddSite>
+        {renderUpdateConfirmDialog()}
+        <AddSite addSite={addSite} refresh={fetchSiteData}></AddSite>
         <DataGrid
           getRowId={(row) => row.site_id}
           rows={sites}
@@ -284,6 +385,16 @@ const Sites = () => {
             },
           }}
         />
+                {!!snackbar && (
+          <Snackbar
+            open
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            onClose={handleCloseSnackbar}
+            autoHideDuration={6000}
+          >
+            <Alert {...snackbar} onClose={handleCloseSnackbar} />
+          </Snackbar>
+        )}
       </Box>
     </Box>
   );
