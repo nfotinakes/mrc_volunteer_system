@@ -1,14 +1,15 @@
-import { Box, useTheme, IconButton } from "@mui/material";
+import { Alert, Box, useTheme, IconButton } from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
 import AddLog from "./AddLog";
 
 /**
@@ -21,6 +22,8 @@ const Logs = () => {
   const [logs, setLogs] = useState([]);
   const [volunteers, setVolunteers] = useState(null);
   const [sites, setSites] = useState(null);
+  const [snackbar, setSnackbar] = useState(null); // Store snackbar alerts
+  const [promiseArguments, setPromiseArguments] = useState(null);
   const [alert, setAlert] = useState({
     id: null,
     open: false,
@@ -137,6 +140,113 @@ const Logs = () => {
     fetchSites();
   }, []);
 
+////
+  // Handle an error on row update/Volunteer edit
+  const handleProcessRowUpdateError = (error) => {
+    console.log(error);
+    setSnackbar({
+      children: "Volunteer Update Error!",
+      severity: "error",
+    });
+  };
+
+  //////////
+
+  function computeMutation(newRow, oldRow) {
+    if(newRow !== oldRow) {
+      return `save changes to log`
+    }
+    return null;
+  }
+
+  const processRowUpdate = useCallback(
+    (newRow, oldRow) =>
+      new Promise((resolve, reject) => {
+        const mutation = computeMutation(newRow, oldRow);
+        if (mutation) {
+          // Save the arguments to resolve or reject the promise later
+          setPromiseArguments({ resolve, reject, newRow, oldRow });
+        } else {
+          resolve(oldRow); // Nothing was changed
+        }
+      }),
+    []
+  );
+
+  const handleUpdateNo = () => {
+    const { oldRow, resolve } = promiseArguments;
+    resolve(oldRow); // Resolve with the old row to not update the internal state
+    setPromiseArguments(null);
+  };
+
+  const handleUpdateYes = async () => {
+    const { newRow, oldRow, reject, resolve } = promiseArguments;
+
+
+
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/log/update/${oldRow.log_id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newRow),
+        }
+      );
+      console.log(newRow);
+      setSnackbar({ children: "Log successfully updated", severity: "success" });
+      resolve(newRow);
+      console.log("Response", response);
+      setPromiseArguments(null);
+    } catch (error) {
+      setSnackbar({ children: "Error updating log", severity: "error" });
+      reject(oldRow);
+      setPromiseArguments(null);
+    }
+  };
+
+  const handleUpdateEntered = () => {
+    // The `autoFocus` is not used because, if used, the same Enter that saves
+    // the cell triggers "No". Instead, we manually focus the "No" button once
+    // the dialog is fully open.
+    // noButtonRef.current?.focus();
+  };
+
+  const renderUpdateConfirmDialog = () => {
+    if (!promiseArguments) {
+      return null;
+    }
+
+    const { newRow, oldRow } = promiseArguments;
+    const mutation = computeMutation(newRow, oldRow);
+
+    return (
+      <Dialog
+        maxWidth="xs"
+        TransitionProps={{ onEntered: handleUpdateEntered }}
+        open={!!promiseArguments}
+      >
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent dividers>
+          {`Pressing 'Yes' will ${mutation}.`}
+        </DialogContent>
+        <DialogActions>
+          <Button ref={noButtonRef} onClick={handleUpdateNo}>
+            No
+          </Button>
+          <Button onClick={handleUpdateYes}>Yes</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+
+
+////
+
+
+
   // Data Grid column info
   const columns = [
     { field: "log_id", headerName: "Log ID" },
@@ -179,16 +289,19 @@ const Logs = () => {
     {
       field: "hours",
       headerName: "Hours",
+      editable: true,
       flex: 0.25,
     },
     {
       field: "role",
       headerName: "Role",
+      editable: true,
       flex: .5,
     },
     {
       field: "note",
       headerName: "Notes",
+      editable: true,
       flex: 1,
     },
     {
@@ -230,6 +343,12 @@ const Logs = () => {
     setAlert({ id: null, open: false });
   };
   const handleEntered = () => {};
+
+  /*
+  Following function is for setting the the visiuble status of Snackbar alerts to close
+  */
+  const handleCloseSnackbar = () => setSnackbar(null);
+
 
 
     // Delete Volunteer Dialog/Alert popup to confirm yes or no
@@ -298,6 +417,7 @@ const Logs = () => {
         }}
       >
         {renderConfirmDialog()}
+        {renderUpdateConfirmDialog()}
         <AddLog addLog={addLog} volunteers={volunteers} sites={sites} refresh={fetchLogData}></AddLog>
         <DataGrid
           getRowId={(row) => row.log_id}
@@ -307,8 +427,8 @@ const Logs = () => {
           disableRowSelectionOnClick
           editMode="row"
           loading={!logs.length}
-          // processRowUpdate={processRowUpdate}
-          // onProcessRowUpdateError={handleProcessRowUpdateError}
+          processRowUpdate={processRowUpdate}
+          onProcessRowUpdateError={handleProcessRowUpdateError}
           slots={{ toolbar: GridToolbar }}
           slotProps={{
             toolbar: {
@@ -317,6 +437,16 @@ const Logs = () => {
             },
           }}
         />
+                {!!snackbar && (
+          <Snackbar
+            open
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            onClose={handleCloseSnackbar}
+            autoHideDuration={6000}
+          >
+            <Alert {...snackbar} onClose={handleCloseSnackbar} />
+          </Snackbar>
+        )}
       </Box>
     </Box>
   );

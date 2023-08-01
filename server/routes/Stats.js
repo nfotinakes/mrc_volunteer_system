@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 router.get("/licenseCount", async (req, res) => {
     let id = req.query.id;
     let sql = `SELECT COUNT(licensure) as Total, licensure FROM volunteer GROUP BY licensure;`;
-    params = [id];
+    let params = [id];
     let rows = await executeSQL(sql, params);
     res.status(200).json(rows);
   });
@@ -21,14 +21,14 @@ router.get("/licenseCount", async (req, res) => {
   router.get("/totalHours", async (req, res) => {
     let id = req.query.id;
     let sql = `SELECT SUM(hours) as total_hours FROM mrc_volunteer.log;`;
-    params = [id];
+    let params = [id];
     let rows = await executeSQL(sql, params);
     res.status(200).json(rows);
   });
 
   router.get("/recentVolunteers", async (req, res) => {
     let sql = `SELECT volunteer_id, first_name, last_name, input_date FROM volunteer ORDER BY input_date DESC LIMIT 6;`;
-    let rows = await executeSQL(sql, params);
+    let rows = await executeSQL(sql);
     res.status(200).json(rows);
   });
 
@@ -40,13 +40,13 @@ router.get("/licenseCount", async (req, res) => {
 
   router.get("/volunteerCount", async (req, res) => {
     let sql = `SELECT COUNT(volunteer_id) as total_volunteers FROM volunteer;`;
-    let rows = await executeSQL(sql, params);
+    let rows = await executeSQL(sql);
     res.status(200).json(rows);
   });
 
   router.get("/siteCount", async (req, res) => {
     let sql = `SELECT COUNT(site_id) as total_sites FROM site;`;
-    let rows = await executeSQL(sql, params);
+    let rows = await executeSQL(sql);
     res.status(200).json(rows);
   });
 

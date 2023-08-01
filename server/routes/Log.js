@@ -80,7 +80,7 @@ router.post("/new", async (req, res) => {
     res.send("Log Added");
   });
 
-    // Update Site
+// Update Log by volunteer ID and Site ID
 router.put("/update/:volid/:siteid", async (req, res) => {
     let volunteerId = req.params.volid;
     let siteId = req.params.siteid;
@@ -93,6 +93,19 @@ router.put("/update/:volid/:siteid", async (req, res) => {
     let rows = executeSQL(sql, params);
     res.send("Log Updated");
   });
+
+// Update Site by Log ID
+router.put("/update/:logid", async (req, res) => {
+  let logId = req.params.logid;
+  let date = req.body.date.split("T")[0];
+  let hours = req.body.hours;
+  let role = req.body.role;
+  let note = req.body.note;
+  let sql = `UPDATE log SET date = ?, hours = ?, role = ?, note = ? WHERE (log_id = ?)`;
+  let params = [date, hours, role, note, logId];
+  let rows = executeSQL(sql, params);
+  res.send("Log Updated");
+});
 
   // Delete single log by ID
 router.delete("/delete/:id", async (req, res) => {
