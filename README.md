@@ -142,10 +142,14 @@ The server routes are organized in the subdirectory `server/routes` routed from 
 This section will detail the endpoints and corresponding actions/response data from each REST endpoint.
 
 ### Stats
+
+
 Return the sum of all volunteer hours logged in the system.
-```sh
-GET /stats/totalHours 
+
 ```
+GET /stats/totalHours
+```
+
 Example response:
 ```json
 [
@@ -156,7 +160,7 @@ Example response:
 ```
 ---
 Return the six most recent volunteers added to the system.
-```sh
+```
 GET /stats/recentVolunteers
 ```
 Example response (only the first two shown):
@@ -177,7 +181,7 @@ Example response (only the first two shown):
 ```
 ---
 Return the count of each type of license in the system.
-```sh
+```
 GET /stats/licenseCount
 ```
 Example response (only the first two shown):
@@ -194,7 +198,7 @@ Example response (only the first two shown):
 ```
 ---
 Returns the top 6 volunteers by total hours logged.
-```sh
+```
 GET /stats/topHours
 ```
 Example response (only the first two shown):
@@ -217,7 +221,7 @@ Example response (only the first two shown):
 ```
 ---
 Return the sum of all volunteers in the system.
-```sh
+```
 GET /stats/volunteerCount
 ```
 Example response:
@@ -230,7 +234,7 @@ Example response:
 ```
 ---
 Returns the sum of all sites in the system.
-```sh
+```
 GET /stats/siteCount
 ```
 Example response:
@@ -243,8 +247,8 @@ Example response:
 ```
 ---
 ### Volunteer
-Return all volunteers from database.
-```sh
+Return all volunteers from the database.
+```
 GET /volunteer
 ```
 Example response (only first volunteer shown):
@@ -265,21 +269,182 @@ Example response (only first volunteer shown):
     },
 ```
 ---
-```sh
-# Delete a volunteer data from the system by volunteer_id primary key
-DELETE /volunteer/{volunteer_id}
+
+Return all volunteer emails from the database.
+```
+GET /volunteer/emails
+```
+Example response (first two emails shown):
+```json
+[
+    {
+        "email": "tjones@gmail.com"
+    },
+    {
+        "email": "sphillips@gmail.com"
+    },
 ```
 ---
-```sh
-# Add a new volunteer to the system
+
+Return all volunteer names (volunteer_id and email as well) from the database (used when adding log)
+```
+GET /volunteer/names
+```
+Example response (first result shown):
+```json
+[
+    {
+        "volunteer_id": 21,
+        "first_name": "Lewis",
+        "last_name": "Armstrong",
+        "email": "lewarmstrong@outlook.com"
+    },
+```
+---
+
+Delete volunteer  from the system by volunteer_id primary key
+```
+DELETE /volunteer/delete/{volunteer_id}
+```
+---
+Add a new volunteer to the system
+```
 POST /volunteer/new
 ```
 ---
-```sh
-# Update an existing volunteer in the system
+Add a new volunteer to the system (used when importing from CSV, status is set as active)
+```
+POST /volunteer/new/import
+```
+---
+Update an existing volunteer in the system
+```
 PUT /volunteer/update/{volunteer_id}
 ```
+---
+### Site
+Get all site info from database
+```
+GET /site
+```
+Example response (only one site shown):
+```json
+[
+    {
+        "site_id": 2,
+        "site_name": "SLO Veterans Hall",
+        "city": "San Luis Obispo",
+        "zipcode": "93401",
+        "note": ""
+    },
+```
+---
 
+Get site names and site_id from database (used when adding log)
+```
+GET /site/names
+```
+Example response (two sites shown):
+```json
+[
+    {
+        "site_id": 1,
+        "site_name": "Generic"
+    },
+    {
+        "site_id": 2,
+        "site_name": "SLO Veterans Hall"
+    },
+```
+---
+
+Add a new site to the database
+```
+POST /site/new
+```
+---
+Delete a site from the database by site_id
+```
+DELETE /site/delete/{site_id}
+```
+---
+Update a sites info by site_id
+```
+PUT /site/update/{site_id}
+```
+---
+
+### Log
+
+Get all log info from database
+```
+GET /log
+```
+Example response (only one log shown):
+```json
+[
+    {
+        "log_id": 1,
+        "first_name": "Molly",
+        "last_name": "Olson",
+        "email": "mololson@gmail.com",
+        "site_name": "SLO Veterans Hall",
+        "zipcode": "93401",
+        "date": "2023-02-18T08:00:00.000Z",
+        "hours": 4,
+        "role": "Swabber",
+        "note": ""
+    },
+```
+---
+
+Add new log to database
+```
+POST /log/new
+```
+---
+
+Delete existing log from database by log_id
+```
+Delete /log/delete/{log_id}
+```
+---
+
+Update existing log by log_id 
+```
+PUT /log/update/{log_id}
+```
+---
+
+### Event
+
+Get all event info from database
+```
+GET /event
+```
+Example response (only one event shown):
+```json
+[
+    {
+        "id": "PR Fairground2023-07-22",
+        "title": "PR Fairground",
+        "start": "2023-07-22",
+        "end": "2023-07-23",
+        "note": "Need 10 volunteers - Swab and Admin"
+    },
+```
+---
+
+Add new event to database
+```
+POST /event/new
+```
+---
+
+Delete existing event from database by id
+```
+Delete /event/delete/{id}
+```
 
 
 
