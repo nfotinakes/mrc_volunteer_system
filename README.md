@@ -48,6 +48,11 @@
         <li><a href="#styling">Styling</a></li>
       </ul>
     <li><a href="#usage">Usage</a></li>
+        <li><a href="#dashboard-1">Dashboard</a></li>
+        <li><a href="#volunteer-2">Volunteer</a></li>
+        <li><a href="#data-import-1">Data Import</a></li>
+        <li><a href="#calendar-1">Calendar</a></li>
+        <li><a href="#aditional-info">Additional Info</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -264,6 +269,9 @@ Example response:
     }
 ]
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ---
 ### Volunteer
 Return all volunteers from the database.
@@ -340,6 +348,9 @@ Update an existing volunteer in the system
 ```
 PUT /volunteer/update/{volunteer_id}
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ---
 ### Site
 Get all site info from database
@@ -391,8 +402,10 @@ Update a sites info by site_id
 ```
 PUT /site/update/{site_id}
 ```
----
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
 ### Log
 
 Get all log info from database
@@ -433,8 +446,10 @@ Update existing log by log_id
 ```
 PUT /log/update/{log_id}
 ```
----
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
 ### Event
 
 Get all event info from database
@@ -465,11 +480,7 @@ Delete existing event from database by id
 Delete /event/delete/{id}
 ```
 
-
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- Client -->
 ## Client
@@ -488,6 +499,7 @@ The client-side makes heavy use of the React library [Material UI](https://mui.c
 * [Material Icons](https://mui.com/material-ui/material-icons/)
 * [Text Field](https://mui.com/material-ui/react-text-field/)
 * [Button](https://mui.com/material-ui/react-button/)
+
 
 #### Dashboard
 
@@ -538,6 +550,8 @@ Upon loading the application, the Dashboard page will be displayed with analytic
 
 https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/499bf36e-b4df-4847-a6fc-1f1d1134977c
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Volunteer
 Volunteers can be edited by double-clicking the cell, editing, pressing 'Enter' or clicking off the row. A confirm dialog will prompt user to confirm save.
 
@@ -567,11 +581,15 @@ Select the log icon in the right-most column to view all logs from any volunteer
 
 https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/31c34b23-578b-4875-8cec-79166323c330
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Data Import
 
 Volunteers can be added via a CSV file by uploading the file and clicking "Add Volunteers." File headers must match, and emails must be unique.
 
 https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/1c9c29ed-9b59-4c8a-bd51-a19a5a3fef67
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Calendar
 
@@ -583,27 +601,15 @@ To add an event, click any date on the calendar and enter event info. Events can
 
 https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/cddd4b6e-cd07-4917-84f0-9ea35d7e5705
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Additional Info
 
 Some additional site information on functionality is available via accordion menus, which also link to this repository.
 
 https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/d2f0a5bf-6b21-45cc-80d8-e00439dc50e7
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- CONTACT -->
