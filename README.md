@@ -79,7 +79,7 @@ Further detailed information on the database can be found in the following secti
 
 ### ER Diagram
 
-![ER Diagram](https://i.imgur.com/rvsBHei.png)
+![ER Diagram](https://i.imgur.com/43fz6Ya.png)
 
 ### Table Info
 volunteer
@@ -106,6 +106,7 @@ site
 | site_name | String | Site name |
 | city | String | City site is located |
 | zipcode| String | Site city's zipcode |
+| address| String | Site street address |
 | note | String | Optional field for a note or additional site info |
 
 <br />
