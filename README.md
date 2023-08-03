@@ -551,6 +551,35 @@ Select the log icon in the right-most column to view all logs from any volunteer
 
 https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/31c34b23-578b-4875-8cec-79166323c330
 
+### Data Import
+
+Volunteers can be added via a CSV file by uploading the file and clicking "Add Volunteers." File headers must match, and emails must be unique.
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/1c9c29ed-9b59-4c8a-bd51-a19a5a3fef67
+
+### Calendar
+
+Existing calendar event information can be viewed by clicking event in the sidebar or on the calendar event.
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/1154651c-8fef-4b0b-b632-a52ac2ce25c5
+
+To add an event, click any date on the calendar and enter event info. Events can be deleted from the view event prompt.
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/cddd4b6e-cd07-4917-84f0-9ea35d7e5705
+
+### Additional Info
+
+Some additional site information on functionality is available via accordion menus, which also link to this repository.
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/d2f0a5bf-6b21-45cc-80d8-e00439dc50e7
+
+
+
+
+
+
+
+
 
 
 
