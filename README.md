@@ -48,11 +48,13 @@
         <li><a href="#styling">Styling</a></li>
       </ul>
     <li><a href="#usage">Usage</a></li>
+      <ul>
         <li><a href="#dashboard-1">Dashboard</a></li>
         <li><a href="#volunteer-2">Volunteer</a></li>
         <li><a href="#data-import-1">Data Import</a></li>
         <li><a href="#calendar-1">Calendar</a></li>
-        <li><a href="#aditional-info">Additional Info</a></li>
+        <li><a href="#additional-info">Additional Info</a></li>
+      </ul>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
