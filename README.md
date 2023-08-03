@@ -69,15 +69,17 @@ The following sections will provide documentation and specifics on all aspects o
 ## Database
 
 The MRC Volunteer System uses a relational database built with MySQL. To create the database schema, the associated file can be found in the project directory at:
-```sh
+```
 server/data/mrc_volunteer.sh
 ```
+Server environment variables are saved in the `.env` file. Edit accordingly to match your database.
+
 Further detailed information on the database can be found in the following sections:
 
 
 ### ER Diagram
 
-![ER Diagram](https://i.imgur.com/ur2vaw8.png)
+![ER Diagram](https://i.imgur.com/rvsBHei.png)
 
 ### Table Info
 volunteer
@@ -490,13 +492,20 @@ Logs are displayed again using the [MUI X Data Grid](https://mui.com/x/react-dat
 
 #### Data Import
 
-The data import page allows for the user to import volunteers via CSV files. The [Papa Parse](https://www.papaparse.com/) library to help in parsing files. The file headers must match the `volunteer` database headers in this version 1.0.
+The data import page allows for the user to import volunteers via CSV files. The [Papa Parse](https://www.papaparse.com/) library helps in parsing files. The file headers must match the `volunteer` database headers in this version 1.0.
 
 #### Calendar
 
 The calendar page utilizes the [FullCalendar](https://fullcalendar.io/) component/API to create an interface for creating events and saving them to the database.
 
 #### Styling
+
+Site-wide styling, such as colors, are done via the [ThemeProvider](https://mui.com/material-ui/customization/theming/) of MUI. This allows for color palettes to be declared and the ability for swapping colors for light and dark mode. The color palette is created by 
+selecting a color and using the VSCode Tailwind extension to create color gradients.
+
+Further styling for MUI components is usually done using the `sx` prop utilized by most components such as the `Box` and `Data Grid`. More information on [Customization](https://mui.com/material-ui/customization/how-to-customize/).
+
+The background image and logos are in the `/public/assets` sub-directory.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
