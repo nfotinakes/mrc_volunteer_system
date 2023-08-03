@@ -516,9 +516,16 @@ The background image and logos are in the `/public/assets` sub-directory.
 <!-- Usage -->
 ## Usage
 
-Info on features/how to use the site
+#### Dashboard
+Upon loading the application, the Dashboard page will be displayed with analytical widgets. The navigational sidebar is collapsable and a 'dark mode'/'light mode' toggle switch is available in the top right.
+<br/>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+![Checking](https://drive.google.com/uc?id=1whJ_rLovjKiyg3BO7Zk4T5j94wXVD9mS)
+
+
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/4101e9be-79df-440e-832c-086d136f4ad1
+
 
 
 
