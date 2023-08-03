@@ -516,15 +516,47 @@ The background image and logos are in the `/public/assets` sub-directory.
 <!-- Usage -->
 ## Usage
 
-#### Dashboard
-Upon loading the application, the Dashboard page will be displayed with analytical widgets. The navigational sidebar is collapsable and a 'dark mode'/'light mode' toggle switch is available in the top right.
+### Dashboard
+Upon loading the application, the Dashboard page will be displayed with analytical widgets. The navigational sidebar is collapsable, and a 'dark mode'/'light mode' toggle switch is available in the top right.
 <br/>
 
-![Checking](https://drive.google.com/uc?id=1whJ_rLovjKiyg3BO7Zk4T5j94wXVD9mS)
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/499bf36e-b4df-4847-a6fc-1f1d1134977c
+
+### Volunteer
+Volunteers can be edited by double-clicking the cell, editing, pressing 'Enter' or clicking off the row. A confirm dialog will prompt user to confirm save.
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/adec8d5e-1add-400b-99d3-e080ab7b3795
+
+Select the 'Add New' button to add a volunteer, fill out the form, and save. The email must be unique!
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/90c05a78-f6cf-43aa-bb8c-97275300f097
+
+To delete a volunteer, navigate to the desired volunteer, and select the trash can icon in the rightmost column and confirm.
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/d1271851-da4f-4abe-b609-fc540ae46c48
+
+Volunteers can be filtered by using the 'Filter' tab in the toolbar, or the quick search field in the upper right of the grid.
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/2c5f1c9c-5ea5-4ed9-a133-69e63d2be8d2
+
+To quickly email any volunteers, select as many volunteers as desired, then click the "Email Selected" button to launch the default email client.
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/17663924-ad38-4274-b727-9e4e8051fcbe
+
+Volunteers can be exported to a CSV file by using the "Export" tab in the toolbar.
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/c042a721-a4c5-44c1-8f24-d654de41ca71
+
+Select the log icon in the right-most column to view all logs from any volunteer.
+
+https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/31c34b23-578b-4875-8cec-79166323c330
 
 
 
-https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/4101e9be-79df-440e-832c-086d136f4ad1
+
+
+
+
 
 
 
