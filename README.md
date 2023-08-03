@@ -455,7 +455,49 @@ Delete /event/delete/{id}
 <!-- Client -->
 ## Client
 
-Info on frontend here
+This section will outline some of the structure and libraries used within the components of the front end. For more detailed user use cases, see the following section, <a href="#usage">Usage</a>.
+
+The client/front end is structured with each major page organized within the `src/scenes` subdirectory, with `index.jsx` as the main component, and any additional sub-components are located in that folder. Global components such as the Sidebar and Topbar are located in the `src/global` folder, and any additional components, such as analytical charts are
+located in the `src/components` folder.
+
+The client-side makes heavy use of the React library [Material UI](https://mui.com/) such as the following MUI components:
+* [Box](https://mui.com/material-ui/react-box/)
+* [Data Grid](https://mui.com/x/react-data-grid/)
+* [Alert](https://mui.com/material-ui/react-alert/)
+* [Dialog](https://mui.com/material-ui/react-dialog/)
+* [Snackbar](https://mui.com/material-ui/react-snackbar/)
+* [Material Icons](https://mui.com/material-ui/material-icons/)
+* [Text Field](https://mui.com/material-ui/react-text-field/)
+* [Button](https://mui.com/material-ui/react-button/)
+
+#### Dashboard
+
+The dashboard page is the first page rendered when loading the application. It displays analytical information about the data in the system via widgets. These widgets are set to display by using the [Box](https://mui.com/material-ui/react-box/) component and utilizing by setting the `display`  prop to `"grid"` and then setting the parameters with `gridTemplateColumns` and `gridAutoRows` to create a grid to map the sub-boxes which represent each widget. These widgets can then be set to size by editing the props `gridColumn` and `gridRow`.
+
+The dashboard also utilizes the [Nivo](https://nivo.rocks/) library to create the box plot chart component used for the Licensure widget. 
+
+#### Volunteer
+
+The volunteer page utilizes the [MUI X Data Grid](https://mui.com/x/react-data-grid/) to display all volunteers saved in the database. Volunteer logs and adding a new volunteer are done via the [Dialog](https://mui.com/material-ui/react-dialog/) component.
+
+#### Site
+
+Site page functions similarly to the volunteer page utilizing the [MUI X Data Grid](https://mui.com/x/react-data-grid/) to display all site information in the database. 
+
+#### Logs
+
+Logs are displayed again using the [MUI X Data Grid](https://mui.com/x/react-data-grid/). Adding a new log fetches all volunteers and sites from the database, as a log must be associated with an existing volunteer and site.
+
+#### Data Import
+
+The data import page allows for the user to import volunteers via CSV files. The [Papa Parse](https://www.papaparse.com/) library to help in parsing files. The file headers must match the `volunteer` database headers in this version 1.0.
+
+#### Calendar
+
+The calendar page utilizes the [FullCalendar](https://fullcalendar.io/) component/API to create an interface for creating events and saving them to the database.
+
+#### Styling
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
