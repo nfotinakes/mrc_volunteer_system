@@ -31,13 +31,22 @@
     </li>
     <li><a href="#server">Server</a></li>
       <ul>
-        <li><a href="#Stats">Stats</a></li>
-        <li><a href="#Volunteer">Volunteer</a></li>
-        <li><a href="#Site">Site</a></li>
-        <li><a href="#Log">Log</a></li>
-        <li><a href="#Event">Event</a></li>
+        <li><a href="#stats">Stats</a></li>
+        <li><a href="#volunteer">Volunteer</a></li>
+        <li><a href="#site">Site</a></li>
+        <li><a href="#log">Log</a></li>
+        <li><a href="#event">Event</a></li>
       </ul>
     <li><a href="#client">Client</a></li>
+      <ul>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#volunteer-1">Volunteer</a></li>
+        <li><a href="#site-1">Site</a></li>
+        <li><a href="#logs">Logs</a></li>
+        <li><a href="#data-import">Data Import</a></li>
+        <li><a href="#calendar">Calendar</a></li>
+        <li><a href="#styling">Styling</a></li>
+      </ul>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
