@@ -30,6 +30,13 @@
       </ul>
     </li>
     <li><a href="#server">Server</a></li>
+      <ul>
+        <li><a href="#Stats">Stats</a></li>
+        <li><a href="#Volunteer">Volunteer</a></li>
+        <li><a href="#Site">Site</a></li>
+        <li><a href="#Log">Log</a></li>
+        <li><a href="#Event">Event</a></li>
+      </ul>
     <li><a href="#client">Client</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#contact">Contact</a></li>
