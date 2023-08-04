@@ -93,8 +93,10 @@ The following sections will provide documentation and specifics on all aspects o
 
 The MRC Volunteer System uses a relational database built with MySQL. To create the database schema, the associated file can be found in the project directory at:
 ```
-server/data/mrc_volunteer.sh
+server/data/mrc_create_schema.sql
 ```
+Mock data and the model .mwb file can be found in the `server/data` subdirectory as well.
+
 Server environment variables are saved in the `.env` file. Edit accordingly to match your database.
 
 Further detailed information on the database can be found in the following sections:
