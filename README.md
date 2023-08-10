@@ -4,7 +4,7 @@
 <h1 align="center">MRC Volunteer System</h3>
 
   <p align="center">
-    A tool for MRC Unit Coordinators to track, organize, and interact with MRC Volunteer Data
+    A tool for MRC Unit Coordinators to track, organize, and interact with MRC Volunteer Data and manage an MRC volunteer network.
     <br />
     <br />
     <br />
@@ -19,6 +19,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
+        <li><a href="#built-with">Built With</a></li>
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
@@ -67,9 +68,9 @@
 
 ![Dashboard Screnshot](https://i.imgur.com/Fj5BTXj.png)
 
-&emsp;The Medical Reserve Corp is a federal program of around 800 units and over 300,000 trained volunteers who assist with public health efforts throughout our communities. These efforts range from increasing public health literacy, prevention support, and eliminating health disparities, to disaster and emergency response support, such as during disease outbreaks, earthquakes, and floods. An organized and efficient system to contact and sort volunteer data can be essential for quickly mobilizing vital health volunteers when community first responders need support. 
+The Medical Reserve Corp is a federal program of around 800 units and over 300,000 trained volunteers who assist with public health efforts throughout our communities. These efforts range from increasing public health literacy, prevention support, and eliminating health disparities, to disaster and emergency response support, such as during disease outbreaks, earthquakes, and floods. An organized and efficient system to contact and sort volunteer data can be essential for quickly mobilizing vital health volunteers when community first responders need support. 
 
-&emsp;Funding and grants for local MRC units are often limited or competitive, which means MRC unit coordinators are often forced to develop their own systems for managing their local MRC volunteer network. Funds cannot usually be allocated to the development of specialized systems or purchasing pre-existing volunteer tracking software. The goal of the MRC Volunteer System is to provide a base full-stack web application for any MRC unit coordinator to use as a volunteer network management tool. This system will provide the means to store, edit, and organize all necessary information on volunteers, volunteer sites, and volunteer logs. Additional features include volunteer network analytics, CSV import capabilities, calendar event/note storage, and with this source code, the ability to customize as one sees fit! 
+Funding and grants for local MRC units are often limited or competitive, which means MRC unit coordinators are often forced to develop their own systems for managing their local MRC volunteer network. Funds cannot usually be allocated to the development of specialized systems or purchasing pre-existing volunteer tracking software. The goal of the MRC Volunteer System is to provide a base full-stack web application for any MRC unit coordinator to use as a volunteer network management tool. This system will provide the means to store, edit, and organize all necessary information on volunteers, volunteer sites, and volunteer logs. Additional features include volunteer network analytics, CSV import capabilities, calendar event/note storage, and the ability to customize as one sees fit with this source code! 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -82,7 +83,26 @@
 * [![Node.js][Node.js]][Node-url]
 * [![Express][Express]][Express-url]
 
-The following sections will provide documentation and specifics on all aspects of the system, including database design, server and API specifics, and client-side functionality. See the table of contents at the top of the file for easy navigation to any section of this file. 
+### Project Structure
+The system is separated into all front-end files in the `client` directory, and all backend/server files in the `server` directory.
+
+Subdirectories of the client include: <br>
+
+--client <br>
+----public <br>
+----src <br>
+--------components <br>
+--------scenes <br>
+
+Within the `client/public` folder the `/assets` folder includes logos and background images. <br>
+Within the `client/src/components` folder are reusuable components such as the Header. <br>
+Within the `client/src/scenes` includes all main pages and global components. <br>
+
+The server has the `index.js` as the server entry point and routes are organized within the subdirectory: `server/routes` <br>
+
+
+
+The following sections will provide further specifics on all aspects of the system, including database design, server and API specifics, and client-side functionality. See the table of contents at the top of the file for easy navigation to any section of this file. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -95,7 +115,7 @@ The MRC Volunteer System uses a relational database built with MySQL. To create 
 ```
 server/data/mrc_create_schema.sql
 ```
-Mock data and the model .mwb file can be found in the `server/data` subdirectory as well.
+Mock data can be found in the `server/data` subdirectory as well.
 
 Server environment variables are saved in the `.env` file. Edit accordingly to match your database.
 
@@ -167,7 +187,7 @@ event
 
 The server routes are organized in the subdirectory `server/routes` routed from the `index.js` file to `Stats`, `Volunteer`, `Site`, and `Event` subfolders/routes.
 
-This section will detail the endpoints and corresponding actions/response data from each REST endpoint.
+This section will detail the endpoints and corresponding actions/response data from each REST endpoint. Note: not all endpoints are used in the application but available if needed.
 
 ### Stats
 
@@ -503,6 +523,7 @@ The client-side makes heavy use of the React library [Material UI](https://mui.c
 * [Material Icons](https://mui.com/material-ui/material-icons/)
 * [Text Field](https://mui.com/material-ui/react-text-field/)
 * [Button](https://mui.com/material-ui/react-button/)
+* [Accordian](https://mui.com/material-ui/react-accordion/)
 
 
 #### Dashboard
@@ -530,6 +551,10 @@ The data import page allows for the user to import volunteers via CSV files. The
 #### Calendar
 
 The calendar page utilizes the [FullCalendar](https://fullcalendar.io/) component/API to create an interface for creating events and saving them to the database.
+
+#### Additional Info
+
+The info page utilizes the [Accordian](https://mui.com/material-ui/react-accordion/) to display some basic info for the user on system use.
 
 #### Styling
 
