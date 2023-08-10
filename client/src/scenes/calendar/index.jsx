@@ -60,7 +60,7 @@ const Calendar = () => {
     let firstEvents = [];
     console.log("Fetching Events");
     // const token = Cookies.get("XSRF-TOKEN");
-    fetch(`http://localhost:5000/event`)
+    fetch(`${process.env.REACT_APP_API_URL}/event`)
       .then((response) => {
         return response.json();
       })
@@ -77,7 +77,7 @@ const Calendar = () => {
    * Add a new event to database with POST
    */
   const addNewEvent = (event) => {
-    fetch(`http://localhost:5000/event/new`, {
+    fetch(`${process.env.REACT_APP_API_URL}/event/new`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(event),
@@ -96,7 +96,7 @@ const Calendar = () => {
    */
   const deleteEvent = (id) => {
     console.log("Deleting Event ID: " + id);
-    fetch(`http://localhost:5000/event/delete/${id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/event/delete/${id}`, {
       method: "DELETE",
     })
       .then((res) => {

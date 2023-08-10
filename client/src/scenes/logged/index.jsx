@@ -37,7 +37,7 @@ const Logs = () => {
    */
   const fetchLogData = () => {
     console.log("Fetching Logs");
-    fetch(`http://localhost:5000/log`)
+    fetch(`${process.env.REACT_APP_API_URL}/log`)
       .then((response) => {
         console.log("Fetch log response: ", response);
         return response.json();
@@ -55,7 +55,7 @@ const Logs = () => {
    */
   const fetchVolunteers = () => {
     console.log("Fetching Volunteers");
-    fetch(`http://localhost:5000/volunteer/names`)
+    fetch(`${process.env.REACT_APP_API_URL}/volunteer/names`)
       .then((response) => {
         console.log("Fetch volunteers response: ", response);
         return response.json();
@@ -73,7 +73,7 @@ const Logs = () => {
    */
   const fetchSites = () => {
     console.log("Fetching Sites");
-    fetch(`http://localhost:5000/site/names`)
+    fetch(`${process.env.REACT_APP_API_URL}/site/names`)
       .then((response) => {
         console.log("Fetching sites response:" + response);
         return response.json();
@@ -92,18 +92,18 @@ const Logs = () => {
    * @param {Object} log The new log to be added
    */
   const addLog = (log) => {
-    fetch(`http://localhost:5000/log/new`, {
+    fetch(`${process.env.REACT_APP_API_URL}/log/new`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(log),
     })
       .then((res) => {
         console.log("Add log response: ", res);
-        fetchLogData();
         setSnackbar({
           children: "Log successfully added",
           severity: "success",
         });
+        fetchLogData();
       })
       .catch((err) => {
         console.log(err);
@@ -121,7 +121,7 @@ const Logs = () => {
    */
   const deleteLog = (id) => {
     console.log("Deleting Log ID: " + id);
-    fetch(`http://localhost:5000/log/delete/${id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/log/delete/${id}`, {
       method: "DELETE",
     })
       .then((res) => {
@@ -189,7 +189,7 @@ const Logs = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/log/update/${oldRow.log_id}`,
+        `${process.env.REACT_APP_API_URL}/log/update/${oldRow.log_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

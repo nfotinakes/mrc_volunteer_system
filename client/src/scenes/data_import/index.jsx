@@ -34,7 +34,7 @@ const DataImport = () => {
    * save to emails state
    */
   const fetchEmails = async () => {
-    const response = await fetch(`http://localhost:5000/volunteer/emails`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/volunteer/emails`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -109,7 +109,7 @@ const DataImport = () => {
         severity: "error",
       });
     } else {
-      fetch(`http://localhost:5000/volunteer/new/import`, {
+      fetch(`${process.env.REACT_APP_API_URL}/volunteer/new/import`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(volunteer),

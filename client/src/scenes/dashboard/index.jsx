@@ -26,7 +26,7 @@ const Dashboard = () => {
    */
   const fetchTotalHours = () => {
     console.log("Fetching License");
-    fetch(`http://localhost:5000/stats/totalHours`)
+    fetch(`${process.env.REACT_APP_API_URL}/stats/totalHours`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
         return response.json();
@@ -50,7 +50,7 @@ const Dashboard = () => {
    */
   const fetchRecentVolunteers = () => {
     console.log("Fetching Recent Volunteers");
-    fetch(`http://localhost:5000/stats/recentVolunteers`)
+    fetch(`${process.env.REACT_APP_API_URL}/stats/recentVolunteers`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
         return response.json();
@@ -68,7 +68,7 @@ const Dashboard = () => {
    */
   const fetchTopHours = () => {
     console.log("Fetching Top Volunteers");
-    fetch(`http://localhost:5000/stats/topHours`)
+    fetch(`${process.env.REACT_APP_API_URL}/stats/topHours`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
         return response.json();
@@ -86,7 +86,7 @@ const Dashboard = () => {
    */
   const fetchVolunteerCount = () => {
     console.log("Fetching Volunteer Count");
-    fetch(`http://localhost:5000/stats/volunteerCount`)
+    fetch(`${process.env.REACT_APP_API_URL}/stats/volunteerCount`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
         return response.json();
@@ -104,7 +104,7 @@ const Dashboard = () => {
    */
   const fetchSiteCount = () => {
     console.log("Fetching Volunteer Count");
-    fetch(`http://localhost:5000/stats/siteCount`)
+    fetch(`${process.env.REACT_APP_API_URL}/stats/siteCount`)
       .then((response) => {
         console.log("FETCH RESP:" + response);
         return response.json();

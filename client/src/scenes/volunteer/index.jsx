@@ -47,7 +47,7 @@ const Volunteer = () => {
    */
   const fetchVolunteerData = () => {
     console.log("Fetching Volunteers");
-    fetch(`http://localhost:5000/volunteer`)
+    fetch(`${process.env.REACT_APP_API_URL}/volunteer`)
       .then((response) => {
         console.log("Fetch volunteers response: ", response);
         return response.json();
@@ -66,7 +66,7 @@ const Volunteer = () => {
    */
   const fetchLogIds = () => {
     console.log("Fetching Log IDs...");
-    fetch(`http://localhost:5000/volunteer/logCheck`)
+    fetch(`${process.env.REACT_APP_API_URL}/volunteer/logCheck`)
       .then((response) => {
         console.log("Fetch log IDs response: ", response);
         return response.json();
@@ -94,16 +94,16 @@ const Volunteer = () => {
       });
     } else {
       console.log("Deleting Volunteer ID: " + id);
-      fetch(`http://localhost:5000/volunteer/delete/${id}`, {
+      fetch(`${process.env.REACT_APP_API_URL}/volunteer/delete/${id}`, {
         method: "DELETE",
       })
         .then((res) => {
           console.log("Delete volunteer response: ", res);
-          fetchVolunteerData();
           setSnackbar({
             children: "Volunteer successfully deleted",
             severity: "success",
           });
+          fetchVolunteerData();
         })
         .catch((err) => {
           console.log("error deleting...");
@@ -121,18 +121,18 @@ const Volunteer = () => {
    * @param {Object} volunteer New volunteer to add to database
    */
   const addVolunteer = (volunteer) => {
-    fetch(`http://localhost:5000/volunteer/new`, {
+    fetch(`${process.env.REACT_APP_API_URL}/volunteer/new`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(volunteer),
     })
       .then((res) => {
         console.log("Add volunteer response: ", res);
-        fetchVolunteerData();
         setSnackbar({
           children: "Volunteer succesfully added!",
           severity: "success",
         });
+        fetchVolunteerData();
       })
       .catch((err) => {
         console.log(err);
@@ -190,7 +190,7 @@ const Volunteer = () => {
       // Make the fetch request to save in the backend
       // const response = await mutateRow(newRow);
       const response = await fetch(
-        `http://localhost:5000/volunteer/update/${oldRow.volunteer_id}`,
+        `${process.env.REACT_APP_API_URL}/volunteer/update/${oldRow.volunteer_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

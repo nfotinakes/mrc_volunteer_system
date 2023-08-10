@@ -37,7 +37,7 @@ const Sites = () => {
    */
   const fetchSiteData = () => {
     console.log("Fetching Sites...");
-    fetch(`http://localhost:5000/site`)
+    fetch(`${process.env.REACT_APP_API_URL}/site`)
       .then((response) => {
         console.log("Fetch sites response: ", response);
         return response.json();
@@ -56,7 +56,7 @@ const Sites = () => {
    */
   const fetchLogIds = () => {
     console.log("Fetching Log IDs...");
-    fetch(`http://localhost:5000/site/logCheck`)
+    fetch(`${process.env.REACT_APP_API_URL}/site/logCheck`)
       .then((response) => {
         console.log("Fetch log IDs response: ", response);
         return response.json();
@@ -74,18 +74,18 @@ const Sites = () => {
    * @param {Object} site The site to be INSERT into database
    */
   const addSite = (site) => {
-    fetch(`http://localhost:5000/site/new`, {
+    fetch(`${process.env.REACT_APP_API_URL}/site/new`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(site),
     })
       .then((res) => {
         console.log("Add site response: ", res);
-        fetchSiteData();
         setSnackbar({
           children: "Site succesfully added!",
           severity: "success",
         });
+        fetchSiteData();
       })
       .catch((err) => {
         console.log(err);
@@ -107,16 +107,16 @@ const Sites = () => {
       });
     } else {
       console.log("Deleting Site ID: ", id);
-      fetch(`http://localhost:5000/site/delete/${id}`, {
+      fetch(`${process.env.REACT_APP_API_URL}/site/delete/${id}`, {
         method: "DELETE",
       })
         .then((res) => {
           console.log("Delete site response: ", res);
-          fetchSiteData();
           setSnackbar({
             children: "Site successfully deleted",
             severity: "success",
           });
+          fetchSiteData();
         })
         .catch((err) => {
           console.log("error deleting...");
@@ -183,7 +183,7 @@ const Sites = () => {
     try {
       // Make the fetch to save the update to the backend
       const response = await fetch(
-        `http://localhost:5000/site/update/${oldRow.site_id}`,
+        `${process.env.REACT_APP_API_URL}/site/update/${oldRow.site_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
