@@ -9,6 +9,11 @@ const logRoute = require('./routes/Log');
 const eventRoute = require('./routes/Event');
 const statsRoute = require('./routes/Stats');
 
+/**
+ * index.js acts as server controller, routes are split into
+ * corresponding categories into routes folders for oganization
+ */
+
 app.use(express.json());
 app.use(bParse.json());
 app.use(bParse.urlencoded({extended: false}));

@@ -13,11 +13,14 @@ import Snackbar from "@mui/material/Snackbar";
 import AddLog from "./AddLog";
 
 /**
- * Logs renders all Volunteer Log information
+ * Logs component renders all Volunteer Log information
  */
 const Logs = () => {
+  // Theme and colors
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  // State data 
   const noButtonRef = useRef(null);
   const [logs, setLogs] = useState([]);
   const [volunteers, setVolunteers] = useState(null);
@@ -30,13 +33,13 @@ const Logs = () => {
   });
 
   /**
-   * Fetch all log information from database
+   * Fetch all log information from database and save to state
    */
   const fetchLogData = () => {
-    console.log("Fetching Volunteers");
+    console.log("Fetching Logs");
     fetch(`http://localhost:5000/log`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetch log response: ", response);
         return response.json();
       })
       .then((responseData) => {
@@ -48,13 +51,13 @@ const Logs = () => {
   };
 
   /**
-   * Fetch all volunteer names from database
+   * Fetch all volunteer names from database and save to state
    */
   const fetchVolunteers = () => {
     console.log("Fetching Volunteers");
     fetch(`http://localhost:5000/volunteer/names`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetch volunteers response: ", response);
         return response.json();
       })
       .then((responseData) => {
@@ -66,13 +69,13 @@ const Logs = () => {
   };
 
   /**
-   * Fetch all site names from database
+   * Fetch all site names from database and save to state
    */
   const fetchSites = () => {
     console.log("Fetching Sites");
     fetch(`http://localhost:5000/site/names`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetching sites response:" + response);
         return response.json();
       })
       .then((responseData) => {
@@ -85,6 +88,7 @@ const Logs = () => {
 
   /**
    * The addLog function will do a POST fetch to add a new log to the database
+   * fetchLogData() is called to update state
    * @param {Object} log The new log to be added
    */
   const addLog = (log) => {
@@ -94,53 +98,56 @@ const Logs = () => {
       body: JSON.stringify(log),
     })
       .then((res) => {
-        console.log(res);
+        console.log("Add log response: ", res);
         fetchLogData();
-        fetchVolunteers();
-        fetchSites();
-        // setSnackbar({
-        //   children: "Volunteer succesfully added!",
-        //   severity: "success",
-        // });
+        setSnackbar({
+          children: "Log successfully added",
+          severity: "success",
+        });
       })
       .catch((err) => {
         console.log(err);
+        setSnackbar({
+          children: "Error adding log",
+          severity: "success",
+        });
       });
   };
 
+  /**
+   * Delete a log from the database by id
+   * and fetch log data again to refresh state
+   * @param {number} id Log id to delete
+   */
   const deleteLog = (id) => {
     console.log("Deleting Log ID: " + id);
     fetch(`http://localhost:5000/log/delete/${id}`, {
       method: "DELETE",
     })
       .then((res) => {
-        console.log(res);
+        console.log("Delete log response: ", res);
         fetchLogData();
-        fetchVolunteers();
-        fetchSites();
-        // setSnackbar({
-        //   children: "Volunteer successfully deleted",
-        //   severity: "success",
-        // });
+        setSnackbar({
+          children: "Log successfully deleted",
+          severity: "success",
+        });
       })
       .catch((err) => {
-        console.log("error deleting...");
         console.log(err);
-        // setSnackbar({
-        //   children: "Error deleting volunteer",
-        //   severity: "error",
-        // });
+        setSnackbar({
+          children: "Error deleting log",
+          severity: "error",
+        });
       });
   };
 
-  // On load, fetch logs, site, and volunteer data
+  // Use effect hook to fetch logs, site, and volunteer data and store to state
   useEffect(() => {
     fetchLogData();
     fetchVolunteers();
     fetchSites();
   }, []);
 
-////
   // Handle an error on row update/Volunteer edit
   const handleProcessRowUpdateError = (error) => {
     console.log(error);
@@ -150,11 +157,9 @@ const Logs = () => {
     });
   };
 
-  //////////
-
   function computeMutation(newRow, oldRow) {
-    if(newRow !== oldRow) {
-      return `save changes to log`
+    if (newRow !== oldRow) {
+      return `save changes to log`;
     }
     return null;
   }
@@ -182,9 +187,6 @@ const Logs = () => {
   const handleUpdateYes = async () => {
     const { newRow, oldRow, reject, resolve } = promiseArguments;
 
-
-
-
     try {
       const response = await fetch(
         `http://localhost:5000/log/update/${oldRow.log_id}`,
@@ -195,7 +197,10 @@ const Logs = () => {
         }
       );
       console.log(newRow);
-      setSnackbar({ children: "Log successfully updated", severity: "success" });
+      setSnackbar({
+        children: "Log successfully updated",
+        severity: "success",
+      });
       resolve(newRow);
       console.log("Response", response);
       setPromiseArguments(null);
@@ -210,7 +215,6 @@ const Logs = () => {
     // The `autoFocus` is not used because, if used, the same Enter that saves
     // the cell triggers "No". Instead, we manually focus the "No" button once
     // the dialog is fully open.
-    // noButtonRef.current?.focus();
   };
 
   const renderUpdateConfirmDialog = () => {
@@ -232,20 +236,16 @@ const Logs = () => {
           {`Pressing 'Yes' will ${mutation}.`}
         </DialogContent>
         <DialogActions>
-          <Button ref={noButtonRef} onClick={handleUpdateNo}>
+          <Button ref={noButtonRef} onClick={handleUpdateNo} color="error">
             No
           </Button>
-          <Button onClick={handleUpdateYes}>Yes</Button>
+          <Button onClick={handleUpdateYes} color="success">
+            Yes
+          </Button>
         </DialogActions>
       </Dialog>
     );
   };
-
-
-
-////
-
-
 
   // Data Grid column info
   const columns = [
@@ -270,13 +270,13 @@ const Logs = () => {
     {
       field: "site_name",
       headerName: "Site Name",
-      flex: .75,
+      flex: 0.75,
       cellClassName: "site-name-column--cell",
     },
     {
       field: "zipcode",
       headerName: "Zipcode",
-      flex: .5,
+      flex: 0.5,
     },
     {
       field: "date",
@@ -296,7 +296,7 @@ const Logs = () => {
       field: "role",
       headerName: "Role",
       editable: true,
-      flex: .5,
+      flex: 0.5,
     },
     {
       field: "note",
@@ -307,7 +307,7 @@ const Logs = () => {
     {
       field: "Delete Log",
       sortable: false,
-      flex: .5,
+      flex: 0.5,
       disableColumnMenu: true,
       renderCell: ({ row: { log_id } }) => {
         return (
@@ -326,7 +326,6 @@ const Logs = () => {
     },
   ];
 
-  
   /*
   Following functions are handlers for the Volunteer Delete Alert/Dialog
   when the Delete action button is clicked in a volunteer row
@@ -349,32 +348,30 @@ const Logs = () => {
   */
   const handleCloseSnackbar = () => setSnackbar(null);
 
-
-
-    // Delete Volunteer Dialog/Alert popup to confirm yes or no
-    const renderConfirmDialog = () => {
-      return (
-        <Dialog
-          maxWidth="xs"
-          TransitionProps={{ onEntered: handleEntered }}
-          open={alert.open}
-          onClose={handleNo}
-        >
-          <DialogTitle>Are you sure?</DialogTitle>
-          <DialogContent dividers>
-            {`Pressing 'Yes' will delete the log.`}
-          </DialogContent>
-          <DialogActions>
-            <Button ref={noButtonRef} onClick={handleNo} color="error">
-              No
-            </Button>
-            <Button onClick={handleYes} color="success">
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog>
-      );
-    };
+  // Delete Volunteer Dialog/Alert popup to confirm yes or no
+  const renderConfirmDialog = () => {
+    return (
+      <Dialog
+        maxWidth="xs"
+        TransitionProps={{ onEntered: handleEntered }}
+        open={alert.open}
+        onClose={handleNo}
+      >
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent dividers>
+          {`Pressing 'Yes' will delete the log.`}
+        </DialogContent>
+        <DialogActions>
+          <Button ref={noButtonRef} onClick={handleNo} color="error">
+            No
+          </Button>
+          <Button onClick={handleYes} color="success">
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
 
   return (
     <Box m="20px">
@@ -418,7 +415,20 @@ const Logs = () => {
       >
         {renderConfirmDialog()}
         {renderUpdateConfirmDialog()}
-        <AddLog addLog={addLog} volunteers={volunteers} sites={sites} refresh={fetchLogData}></AddLog>
+        <Box
+          m={1}
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="flex-end"
+        >
+          <AddLog
+            addLog={addLog}
+            volunteers={volunteers}
+            sites={sites}
+            refresh={fetchLogData}
+          ></AddLog>
+        </Box>
+
         <DataGrid
           getRowId={(row) => row.log_id}
           checkboxSelection
@@ -436,8 +446,11 @@ const Logs = () => {
               quickFilterProps: { debounceMs: 500 },
             },
           }}
+          sx={{
+            boxShadow: 3,
+          }}
         />
-                {!!snackbar && (
+        {!!snackbar && (
           <Snackbar
             open
             anchorOrigin={{ vertical: "top", horizontal: "center" }}

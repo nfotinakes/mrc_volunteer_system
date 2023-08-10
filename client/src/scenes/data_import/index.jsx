@@ -1,9 +1,10 @@
-import { Box, useTheme } from "@mui/material";
-import { tokens } from "../../theme";
-import { useState } from "react";
-import Papa from "papaparse";
+import { useState, useEffect } from "react";
+import { Alert, Box, useTheme } from "@mui/material";
 import Button from "@mui/material/Button";
 import Header from "../../components/Header";
+import Snackbar from "@mui/material/Snackbar";
+import Papa from "papaparse";
+import { tokens } from "../../theme";
 
 /**
  * The DataImport renders a page with option to import volunteer data from a CSV file
@@ -21,76 +22,111 @@ const DataImport = () => {
   //State to store the values
   const [values, setValues] = useState([]);
 
+  //Store emails
+  const [emails, setEmails] = useState([]);
+
+  // Store snackbar status
+  const [snackbar, setSnackbar] = useState(null);
+  const handleCloseSnackbar = () => setSnackbar(null);
+
+  /**
+   * Fetch all volunteer emails to check for duplicate on import
+   * save to emails state
+   */
+  const fetchEmails = async () => {
+    const response = await fetch(`http://localhost:5000/volunteer/emails`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    const emails = await response.json();
+    console.log("Emails: ", emails);
+    setEmails(emails);
+  };
+
+  useEffect(() => {
+    fetchEmails();
+  }, []);
+
   /**
    * This function handles the file added, to parse data to JSON
    */
   const changeHandler = (event) => {
+    if (event.target.files[0]) {
+      // Passing file data (event.target.files[0]) to parse using Papa.parse
+      Papa.parse(event.target.files[0], {
+        header: true,
+        skipEmptyLines: true,
+        complete: function (results) {
+          const rowsArray = [];
+          const valuesArray = [];
 
-    if(event.target.files[0]) {
- // Passing file data (event.target.files[0]) to parse using Papa.parse
-    Papa.parse(event.target.files[0], {
-      header: true,
-      skipEmptyLines: true,
-      complete: function (results) {
-        const rowsArray = [];
-        const valuesArray = [];
+          // Iterating data to get column name and their values
+          // TODO: check this
+          results.data.map((d) => {
+            rowsArray.push(Object.keys(d));
+            valuesArray.push(Object.values(d));
+          });
 
-        // Iterating data to get column name and their values
-        results.data.map((d) => {
-          rowsArray.push(Object.keys(d));
-          valuesArray.push(Object.values(d));
-        });
+          // Parsed Data Response in array format
+          setParsedData(results.data);
 
-        // Parsed Data Response in array format
-        setParsedData(results.data);
+          // Filtered Column Names
+          setTableRows(rowsArray[0]);
 
-        // Filtered Column Names
-        setTableRows(rowsArray[0]);
-
-        // Filtered Values
-        setValues(valuesArray);
-      },
-    });
-
+          // Filtered Values
+          setValues(valuesArray);
+        },
+      });
     }
-   
   };
 
-  // Console log parsedData state
-  const printParsedState = () => {
-    console.log(parsedData);
-  };
-
+  /**
+   * This function is executed when the "Clear Data" button is clicked
+   * and clears the parsed data from the state
+   */
   const clearData = () => {
     setParsedData([]);
     setTableRows([]);
     setValues([]);
-    console.log(parsedData);
-  }
+  };
 
+  /**
+   * For each volunteer parsed, attempt to add the volunteer
+   * to the database
+   */
   const submitImported = () => {
     parsedData.forEach((volunteer) => addVolunteers(volunteer));
   };
 
-  // Fetch call to add a new volunteer
+  /**
+   * This function handles the actual fetch call for each volunteer passed
+   * from the submitImported function. Will check for exisiting volunteer email.
+   */
   const addVolunteers = (volunteer) => {
-    fetch(`http://localhost:5000/volunteer/new/import`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(volunteer),
-    })
-      .then((res) => {
-        console.log(res);
-        console.log("Successfully Imported!");
-
-        // setSnackbar({
-        //   children: "Volunteer succesfully added!",
-        //   severity: "success",
-        // });
-      })
-      .catch((err) => {
-        console.log(err);
+    if (JSON.stringify(emails).includes(volunteer.email)) {
+      setSnackbar({
+        children: "One or more volunteer emails already exist!",
+        severity: "error",
       });
+    } else {
+      fetch(`http://localhost:5000/volunteer/new/import`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(volunteer),
+      })
+        .then((res) => {
+          console.log(res);
+          console.log("Successfully Imported!");
+
+          setSnackbar({
+            children: "Volunteers added!",
+            severity: "success",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -103,7 +139,8 @@ const DataImport = () => {
         File headers must match for the format: first_name, last_name, email,
         phone, zipcode, licensure, license_num, license_exp
       </Box>
-
+      <br />
+      <br />
       <input
         type="file"
         name="file"
@@ -120,14 +157,7 @@ const DataImport = () => {
         >
           Add Volunteers
         </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          sx={{ height: 40, margin: 1 }}
-          onClick={printParsedState}
-        >
-          Console Log State
-        </Button>
+
         <Button
           variant="contained"
           color="secondary"
@@ -163,6 +193,16 @@ const DataImport = () => {
           </tbody>
         </table>
       </Box>
+      {!!snackbar && (
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          onClose={handleCloseSnackbar}
+          autoHideDuration={6000}
+        >
+          <Alert {...snackbar} onClose={handleCloseSnackbar} />
+        </Snackbar>
+      )}
     </Box>
   );
 };

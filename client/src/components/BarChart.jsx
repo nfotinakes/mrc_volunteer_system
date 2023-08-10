@@ -1,16 +1,23 @@
+import { useEffect, useState } from "react";
+import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
-import { useTheme } from "@mui/material";
-import { useEffect, useState } from "react";
 
+/**
+ * BarChart component is used to display all licensure types in the system.
+ * Utilizes the Nivo library for analytical display.
+ * @returns the bar chart
+ */
 const BarChart = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [licensures, setLicensures] = useState([]);
+  const [licensures, setLicensures] = useState([]); // licensure count
 
+  /**
+   * Fetch licensure count from the database and save to state
+   */
   const fetchLicensures = () => {
     console.log("Fetching Licensures");
-    // const token = Cookies.get("XSRF-TOKEN");
     fetch(`http://localhost:5000/stats/licenseCount`)
       .then((response) => {
         console.log("FETCH RESP:" + response);

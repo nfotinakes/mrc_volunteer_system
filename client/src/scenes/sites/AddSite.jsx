@@ -9,33 +9,48 @@ import { Alert, Box, useTheme } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import { tokens } from "../../theme";
 
-const AddSite = ({ addSite, refresh }) => {
+/**
+ * The AddSite component renders a dialog for entering site information
+ * and using the addSite function passed from parent to add the new site
+ */
+const AddSite = ({ addSite }) => {
+  // Theme and colors
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   const [snackbar, setSnackbar] = useState(null);
+
+  // Store new site info in state for submission
+  // Use blank string for all values except name to allow
+  // for blank values
   const [site, setSite] = useState({
     site_name: null,
-    city: null,
-    zipcode: null,
-    note: null,
+    address: "",
+    city: "",
+    zipcode: "",
+    note: "",
   });
 
-  const [dialog, setDialog] = useState({ open: false });
+  const [dialog, setDialog] = useState({ open: false }); // For setting dialog open status
 
+  // Toggle dialog to open
   const handleClickOpen = () => {
     setDialog({ open: true });
   };
 
+  // Close dialog and clear state
   const handleClose = () => {
     setSite({
       site_name: null,
-      city: null,
-      zipcode: null,
-      note: null,
+      address: "",
+      city: "",
+      zipcode: "",
+      note: "",
     });
     setDialog({ open: false });
   };
 
+  // For new site submission, name must be entered but other info can be blank.
   const handleSubmit = (e) => {
     e.preventDefault();
     // Perform any necessary form submission logic here
@@ -47,20 +62,26 @@ const AddSite = ({ addSite, refresh }) => {
     } else {
       addSite(site);
       console.log("Form submitted:", site);
+      setSite({
+        site_name: null,
+        address: "",
+        city: "",
+        zipcode: "",
+        note: "",
+      });
+      setDialog({ open: false });
     }
-
-
-    setSite({
-      site_name: null,
-      city: null,
-      zipcode: null,
-      note: null,
-    });
-    setDialog({ open: false });
   };
 
+  /**
+   * The following are handlers for data change
+   */
   const handleSiteNameChange = (event) => {
     site.site_name = event.target.value;
+  };
+
+  const handleSiteAddressChange = (event) => {
+    site.address = event.target.value;
   };
 
   const handleCityChange = (event) => {
@@ -81,9 +102,7 @@ const AddSite = ({ addSite, refresh }) => {
   return (
     <div>
       <Box
-        // m={1}
         m="auto"
-        //margin
         display="flex"
         justifyContent="flex-end"
         alignItems="flex-end"
@@ -115,6 +134,14 @@ const AddSite = ({ addSite, refresh }) => {
           <TextField
             autoFocus
             style={{ margin: 3 }}
+            label="Address"
+            name="address"
+            onChange={handleSiteAddressChange}
+            fullWidth
+          />
+          <TextField
+            autoFocus
+            style={{ margin: 3 }}
             label="City"
             name="city"
             onChange={handleCityChange}
@@ -133,6 +160,8 @@ const AddSite = ({ addSite, refresh }) => {
             label="Note"
             name="note"
             onChange={handleNotesChange}
+            multiline
+            rows={4}
             fullWidth
           />
 
@@ -150,7 +179,7 @@ const AddSite = ({ addSite, refresh }) => {
       {!!snackbar && (
         <Snackbar
           open
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
           onClose={handleCloseSnackbar}
           autoHideDuration={6000}
         >

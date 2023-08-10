@@ -15,11 +15,14 @@ import DialogTitle from "@mui/material/DialogTitle";
  * Props passed in are the volunteers id and name
  */
 const LogModal = ({ id, name }) => {
+  // Theme and color
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  // State data for dialog open status, and all logs by volunteer id
   const [open, setOpen] = useState(false);
   const [logs, setLogs] = useState([]);
-  const[hours, setHours] = useState("");
+  const[hours, setHours] = useState(""); // for total hours
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -97,6 +100,12 @@ const LogModal = ({ id, name }) => {
       flex: 0.75,
       editable: true,
       cellClassName: "name-column--cell",
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      flex: 0.75,
+      editable: true,
     },
     {
       field: "site_name",
@@ -197,6 +206,15 @@ const LogModal = ({ id, name }) => {
                 disableRowSelectionOnClick
                 editMode="row"
                 slots={{ toolbar: GridToolbar }}
+                slotProps={{
+                  toolbar: {
+                    showQuickFilter: true,
+                    quickFilterProps: { debounceMs: 500 },
+                  },
+                }}
+                sx={{
+                  boxShadow: 3,
+                }}
               />
             </Box>
           </DialogContent>

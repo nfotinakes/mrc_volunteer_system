@@ -1,6 +1,13 @@
 import { createContext, useState, useMemo } from "react";
 import { createTheme } from "@mui/material/styles";
 
+/**
+ * theme.js provides theme, color, pallette and styling,
+ * allowing for easy access to colors and toggling dark/light mode.
+ * County logo is also toggled for mode selection.
+ * 
+ */
+
 // Color design tokens - created using TailWind Extension
 export const tokens = (mode) => ({
   ...(mode === "dark"
@@ -133,7 +140,7 @@ export const themeSettings = (mode) => {
               main: colors.primary[800],
             },
             secondary: {
-              main: colors.greenAccent[400], // was 500
+              main: colors.greenAccent[400], 
             },
             neutral: {
               dark: colors.grey[700],
@@ -200,7 +207,6 @@ export const themeSettings = (mode) => {
 /*
 The following functions handle toggling light/dark mode 
 */
-//TODO: Check for using state vs localstorage upon refresh
 export const ColorModeContext = createContext({
   toggleColorMode: () => {},
 });

@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import "react-pro-sidebar/dist/css/styles.css";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
-import { tokens } from "../../theme";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
@@ -12,8 +10,12 @@ import ListAltTwoToneIcon from "@mui/icons-material/ListAltTwoTone";
 import PersonTwoToneIcon from "@mui/icons-material/PersonTwoTone";
 import CalendarMonthTwoToneIcon from "@mui/icons-material/CalendarMonthTwoTone";
 import InfoTwoToneIcon from "@mui/icons-material/InfoTwoTone";
+import { tokens } from "../../theme";
+import "react-pro-sidebar/dist/css/styles.css";
 
-//TODO: Fix Icon change on refresh: perhapes localstorage
+/**
+ * A component for each item of the sidebar
+ */
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -32,19 +34,19 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   );
 };
 
+/**
+ * The Sidebar component renders the navigational sidebar on the side of the application.
+ * Is collapsable and can set the selected icon to the current page.
+ */
 const Sidebar = () => {
+  // Variables for theme, color, and county image
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const imgSrc = theme.palette.img;
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("Dashboard");
-  console.log(imgSrc);
+  const imgSrc = theme.palette.img; // Image url set in theme file
 
-  useEffect(() => {
-    localStorage.setItem("selected", JSON.stringify(selected));
-    console.log("Local:", localStorage.getItem("selected"));
-    console.log("Selected", selected);
-  }, [selected]);
+  // Variables for if state is collapsed
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [selected, setSelected] = useState("Dashboard"); // Default selected is Dashboard
 
   return (
     <Box
@@ -70,7 +72,6 @@ const Sidebar = () => {
         collapsed={isCollapsed}
         width="300px"
         image="../../../assets/morro_bay.jpg"
-        
       >
         <Menu iconShape="square">
           <MenuItem
@@ -98,6 +99,7 @@ const Sidebar = () => {
             )}
           </MenuItem>
 
+          {/* Display county logo if not collapsed */}
           {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
@@ -111,6 +113,7 @@ const Sidebar = () => {
             </Box>
           )}
 
+          {/* Populate sidebars with Item components and route to page */}
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
               title="Dashboard"

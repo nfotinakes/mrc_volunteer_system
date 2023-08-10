@@ -2,9 +2,6 @@ const mysql = require('mysql2');
 const dotenv = require('dotenv');
 let result = dotenv.config();
 
-// Check variables
-//console.log("reading variables: ", result);
-
 const pool  = mysql.createPool({
     connectionLimit: 10,
     host: process.env.MYSQL_HOST,

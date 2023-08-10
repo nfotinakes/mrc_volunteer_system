@@ -1,9 +1,7 @@
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Alert, Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
-import { useState, useEffect, useRef, useCallback } from "react";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import Header from "../../components/Header";
 import Snackbar from "@mui/material/Snackbar";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -11,36 +9,37 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import AddVolunteer from "./AddVolunteer";
+import Header from "../../components/Header";
 import LogModal from "./LogModal";
+import { tokens } from "../../theme";
 
 /**
  * Volunteer component displays all volunteers in the system for CRUD operations
  */
 const Volunteer = () => {
-  /**
-   * Theme and color imports
-   */
+  // Theme and color
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
   const noButtonRef = useRef(null);
+
   const [volunteers, setVolunteers] = useState([]); // Store all volunteers
+  const [logIDs, setLogIDs] = useState([]); // store all site IDs from logs (for checking site deletion)
   const [snackbar, setSnackbar] = useState(null); // Store snackbar alerts
   const [alert, setAlert] = useState({
     id: null,
     open: false,
   });
   const [selectedRows, setSelectedRows] = useState([]); // Store selected rows for Email Mailto
-  
-  // Testing new UPDATE
+
+  // Used for volunteer edit (row update)
   const [promiseArguments, setPromiseArguments] = useState(null);
-  // const mutateRow = useFakeMutation();
 
   /**
-   * useEffect hook to fetch all volunteer data after render/update
+   * useEffect hook to fetch all volunteer data on render or state change
    */
   useEffect(() => {
     fetchVolunteerData();
+    fetchLogIds();
   }, []);
 
   /**
@@ -50,7 +49,7 @@ const Volunteer = () => {
     console.log("Fetching Volunteers");
     fetch(`http://localhost:5000/volunteer`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetch volunteers response: ", response);
         return response.json();
       })
       .then((responseData) => {
@@ -62,30 +61,59 @@ const Volunteer = () => {
   };
 
   /**
+   * Fetch all site IDs from volunteer logs
+   * Use these to check for site deletion
+   */
+  const fetchLogIds = () => {
+    console.log("Fetching Log IDs...");
+    fetch(`http://localhost:5000/volunteer/logCheck`)
+      .then((response) => {
+        console.log("Fetch log IDs response: ", response);
+        return response.json();
+      })
+      .then((responseData) => {
+        setLogIDs(responseData);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  /**
    * Delete a volunteer from the database, then refresh state
    * @param {number} id Volunteer unique ID
    */
   const deleteVolunteer = (id) => {
-    console.log("Deleting Volunteer ID: " + id);
-    fetch(`http://localhost:5000/volunteer/delete/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => {
-        console.log(res);
-        fetchVolunteerData();
-        setSnackbar({
-          children: "Volunteer successfully deleted",
-          severity: "success",
-        });
-      })
-      .catch((err) => {
-        console.log("error deleting...");
-        console.log(err);
-        setSnackbar({
-          children: "Error deleting volunteer",
-          severity: "error",
-        });
+    // Check if any logs are associated with the volunteer to be deleted
+    // If not, proceed to delete
+    if (JSON.stringify(logIDs).includes(id)) {
+      setSnackbar({
+        children:
+          "There are logs associated with this volunteer, delete them first!",
+        severity: "error",
       });
+    } else {
+      console.log("Deleting Volunteer ID: " + id);
+      fetch(`http://localhost:5000/volunteer/delete/${id}`, {
+        method: "DELETE",
+      })
+        .then((res) => {
+          console.log("Delete volunteer response: ", res);
+          fetchVolunteerData();
+          setSnackbar({
+            children: "Volunteer successfully deleted",
+            severity: "success",
+          });
+        })
+        .catch((err) => {
+          console.log("error deleting...");
+          console.log(err);
+          setSnackbar({
+            children: "Error deleting volunteer",
+            severity: "error",
+          });
+        });
+    }
   };
 
   /**
@@ -99,7 +127,7 @@ const Volunteer = () => {
       body: JSON.stringify(volunteer),
     })
       .then((res) => {
-        console.log(res);
+        console.log("Add volunteer response: ", res);
         fetchVolunteerData();
         setSnackbar({
           children: "Volunteer succesfully added!",
@@ -115,42 +143,6 @@ const Volunteer = () => {
    * The following functions handle changes to a volunteer/row in the Data Grid
    */
 
-  /**
-   * Datagrid row update on change, calls database with fetch by volunteer ID
-   * @param {row} newRow The row/volunteer to be updated
-   * @returns The updated row
-   */
-  // const processRowUpdate = (newRow) => {
-  //   const updatedRow = { ...newRow };
-
-  //   if (window.confirm(`Are you sure you want to edit the volunteer?`)) {
-  //     fetch(
-  //       `http://localhost:5000/volunteer/update/${updatedRow.volunteer_id}`,
-  //       {
-  //         method: "PUT",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify(updatedRow),
-  //       }
-  //     )
-  //       .then((res) => {
-  //         console.log(res);
-  //         setSnackbar({
-  //           children: "Volunteer Updated!",
-  //           severity: "success",
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         setSnackbar({
-  //           children: "Volunteer Update Error!",
-  //           severity: "error",
-  //         });
-  //       });
-
-  //     return newRow;
-  //   }
-  // };
-
   // Handle an error on row update/Volunteer edit
   const handleProcessRowUpdateError = (error) => {
     console.log(error);
@@ -160,33 +152,15 @@ const Volunteer = () => {
     });
   };
 
-  //////////
-
+  // Check for row change
   function computeMutation(newRow, oldRow) {
-    // if (newRow.first_name !== oldRow.first_name) {
-    //   return `Name from '${oldRow.first_name}' to '${newRow.first_name}'`;
-    // }
-    // if (newRow.last_name !== oldRow.last_name) {
-    //   return `Name from '${oldRow.last_name}' to '${newRow.last_name}'`;
-    // }
-    // if (newRow.email !== oldRow.email) {
-    //   return `Age from '${oldRow.email || ""}' to '${newRow.email || ""}'`;
-    // }
-    // if (newRow.phone !== oldRow.phone) {
-    //   return `Age from '${oldRow.phone || ""}' to '${newRow.phone || ""}'`;
-    // }
-    // if (newRow.zipcode !== oldRow.zipcode) {
-    //   return `Zipcode from '${oldRow.zipcode || ""}' to '${newRow.zipcode || ""}'`;
-    // }
-    // if (newRow.status !== oldRow.status) {
-    //   return `Age from '${oldRow.status || ""}' to '${newRow.status || ""}'`;
-    // }
-    if(newRow !== oldRow) {
-      return `save changes to volunteer`
+    if (newRow !== oldRow) {
+      return `save changes to volunteer`;
     }
     return null;
   }
 
+  // Process a row change
   const processRowUpdate = useCallback(
     (newRow, oldRow) =>
       new Promise((resolve, reject) => {
@@ -201,17 +175,19 @@ const Volunteer = () => {
     []
   );
 
+  // If cancel, set back to old row
   const handleUpdateNo = () => {
     const { oldRow, resolve } = promiseArguments;
     resolve(oldRow); // Resolve with the old row to not update the internal state
     setPromiseArguments(null);
   };
 
+  // If change confirm, try to save edit to database
   const handleUpdateYes = async () => {
     const { newRow, oldRow, reject, resolve } = promiseArguments;
 
     try {
-      // Make the HTTP request to save in the backend
+      // Make the fetch request to save in the backend
       // const response = await mutateRow(newRow);
       const response = await fetch(
         `http://localhost:5000/volunteer/update/${oldRow.volunteer_id}`,
@@ -221,9 +197,12 @@ const Volunteer = () => {
           body: JSON.stringify(newRow),
         }
       );
-      setSnackbar({ children: "Volunteer successfully updated", severity: "success" });
+      setSnackbar({
+        children: "Volunteer successfully updated",
+        severity: "success",
+      });
       resolve(newRow);
-      console.log("Response", response);
+      console.log("Edit volunteer response: ", response);
       setPromiseArguments(null);
     } catch (error) {
       setSnackbar({ children: "Error updating volunteer", severity: "error" });
@@ -236,9 +215,11 @@ const Volunteer = () => {
     // The `autoFocus` is not used because, if used, the same Enter that saves
     // the cell triggers "No". Instead, we manually focus the "No" button once
     // the dialog is fully open.
-    // noButtonRef.current?.focus();
   };
 
+  /**
+   * The Dialog for confirming row update
+   */
   const renderUpdateConfirmDialog = () => {
     if (!promiseArguments) {
       return null;
@@ -258,16 +239,16 @@ const Volunteer = () => {
           {`Pressing 'Yes' will ${mutation}.`}
         </DialogContent>
         <DialogActions>
-          <Button ref={noButtonRef} onClick={handleUpdateNo}>
+          <Button ref={noButtonRef} onClick={handleUpdateNo} color="error">
             No
           </Button>
-          <Button onClick={handleUpdateYes}>Yes</Button>
+          <Button onClick={handleUpdateYes} color="success">
+            Yes
+          </Button>
         </DialogActions>
       </Dialog>
     );
   };
-
-  //////////
 
   /*
   Following functions are handlers for the Volunteer Delete Alert/Dialog
@@ -295,18 +276,18 @@ const Volunteer = () => {
   Data Grid column specifications
   */
   const columns = [
-    { field: "volunteer_id", headerName: "ID" },
+    { field: "volunteer_id", headerName: "ID", flex: 0.5 },
     {
       field: "first_name",
       headerName: "First Name",
-      flex: 1,
+      flex: 0.75,
       editable: true,
       cellClassName: "name-column--cell",
     },
     {
       field: "last_name",
       headerName: "Last Name",
-      flex: 1,
+      flex: 0.75,
       editable: true,
       cellClassName: "name-column--cell",
     },
@@ -326,12 +307,12 @@ const Volunteer = () => {
       field: "zipcode",
       headerName: "Zipcode",
       editable: true,
-      flex: 1,
+      flex: 0.5,
     },
     {
       field: "status",
       headerName: "Status",
-      flex: 1,
+      flex: 0.5,
       editable: true,
       type: "boolean",
     },
@@ -341,19 +322,19 @@ const Volunteer = () => {
       type: "date",
       valueGetter: ({ value }) => value && new Date(value),
       editable: true,
-      flex: 1,
+      flex: 0.75,
     },
     {
       field: "licensure",
       headerName: "Licensure",
       editable: true,
-      flex: 1,
+      flex: 0.75,
     },
     {
       field: "license_num",
       headerName: "License Num",
       editable: true,
-      flex: 1,
+      flex: 0.75,
     },
     {
       field: "license_exp",
@@ -361,13 +342,13 @@ const Volunteer = () => {
       type: "date",
       editable: true,
       valueGetter: ({ value }) => value && new Date(value),
-      flex: 1,
+      flex: 0.75,
     },
     // Actions icons at end of grid, button for delete via Alert, and Modal for opening logs
     {
       field: "Delete/View Log",
       sortable: false,
-      flex: 1,
+      flex: 0.75,
       disableColumnMenu: true,
       renderCell: ({ row: { volunteer_id, first_name, last_name } }) => {
         return (
@@ -388,6 +369,10 @@ const Volunteer = () => {
     },
   ];
 
+  /**
+   * This function will take all selected emails, and launch the
+   * local email client with mailto
+   */
   const handleEmailSelection = (event) => {
     const emails = selectedRows.map(
       (id) => volunteers.find((el) => el.volunteer_id === id).email
@@ -447,10 +432,6 @@ const Volunteer = () => {
   return (
     <Box m="20px">
       <Header title="Volunteers"></Header>
-      {/* <div style={{ width: "100%" }}>
-        For DEBUG: display state.<br></br>
-        {JSON.stringify(volunteers)}
-      </div> */}
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -480,14 +461,14 @@ const Volunteer = () => {
           },
         }}
       >
+        {/* Dialogs - confirm and update */}
         {renderConfirmDialog()}
         {renderUpdateConfirmDialog()}
 
-        <AddVolunteer
-          addVolunteer={addVolunteer}
-          refresh={fetchVolunteerData}
-        />
+        {/* Component for adding new volunteer */}
+        <AddVolunteer addVolunteer={addVolunteer} />
 
+        {/* Button for emailing selected volunteers */}
         <Box
           m={1}
           display="flex"
@@ -500,9 +481,10 @@ const Volunteer = () => {
             sx={{ height: 40 }}
             onClick={(event) => handleEmailSelection(event)}
           >
-            E-mail Selected
+            Email Selected
           </Button>
         </Box>
+        {/* Volunteer Data Grid */}
         <DataGrid
           getRowId={(row) => row.volunteer_id}
           rows={volunteers}

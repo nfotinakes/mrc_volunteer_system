@@ -1,17 +1,16 @@
-import Header from "../../components/Header";
 import { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
-import { tokens } from "../../theme";
 import AccessTimeTwoToneIcon from "@mui/icons-material/AccessTimeTwoTone";
-import BarChart from "../../components/BarChart";
+import Header from "../../components/Header";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import HomeWorkTwoToneIcon from "@mui/icons-material/HomeWorkTwoTone";
+import BarChart from "../../components/BarChart";
+import { tokens } from "../../theme";
 
 /**
  * This components renders the Dashboard with analytic grid and widgets
  */
 const Dashboard = () => {
-
   // Import theme and color palette
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -19,7 +18,6 @@ const Dashboard = () => {
   const [hours, setHours] = useState(""); //store total volunteer hours
   const [recentVolunteers, setRecentVolunteers] = useState([]); // store most recent volunteers
   const [topHours, setTopHours] = useState([]); // store top volunteers by hours
-  const [licensures, setLicensures] = useState([]); // May not be neccesary, possibly just use barchart component
   const [volunteerCount, setVolunteerCount] = useState([]); // store total volunteers
   const [siteCount, setSiteCount] = useState([]); // store total sites
 
@@ -59,24 +57,6 @@ const Dashboard = () => {
       })
       .then((responseData) => {
         setRecentVolunteers(responseData);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  /**
-   * Fetch the count of all different licensures in the system
-   */
-  const fetchLicensures = () => {
-    console.log("Fetching Licensures");
-    fetch(`http://localhost:5000/stats/licenseCount`)
-      .then((response) => {
-        console.log("FETCH RESP:" + response);
-        return response.json();
-      })
-      .then((responseData) => {
-        setLicensures(responseData);
       })
       .catch((err) => {
         console.error(err);
@@ -138,13 +118,12 @@ const Dashboard = () => {
   };
 
   /**
-   * useEffect hook to call all fetch functions for widgets
+   * useEffect hook to call all fetch functions for widgets on load/state change
    */
   useEffect(() => {
     fetchTotalHours();
     fetchRecentVolunteers();
     fetchTopHours();
-    fetchLicensures();
     fetchVolunteerCount();
     fetchSiteCount();
   }, []);
@@ -153,7 +132,7 @@ const Dashboard = () => {
     <Box m="20px">
       {/* Header section */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Welcome MRC Coordinator!" />
+        <Header title="Dashboard" subtitle="Welcome MRC Coordinator!" />
       </Box>
 
       {/* Grid section */}

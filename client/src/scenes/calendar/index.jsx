@@ -1,9 +1,4 @@
-import FullCalendar from "@fullcalendar/react";
-import { formatDate } from "@fullcalendar/core";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import listPlugin from "@fullcalendar/list";
+import { useState, useEffect, createRef, useRef } from "react";
 import {
   Box,
   DialogContentText,
@@ -13,16 +8,20 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import Header from "../../components/Header";
-import { tokens } from "../../theme";
-import { useState, useEffect, createRef, useRef } from "react";
-import EventDialog from "./EventDialog";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import FullCalendar from "@fullcalendar/react";
+import { formatDate } from "@fullcalendar/core";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import listPlugin from "@fullcalendar/list";
+import Header from "../../components/Header";
+import { tokens } from "../../theme";
 
 /**
  * Calendar component renders all events from database
@@ -133,14 +132,11 @@ const Calendar = () => {
     eventArray.forEach((element) => api.addEvent(element));
   };
 
+  //TODO: Check this out
   useEffect(() => {
     const api = calendarRef.current.getApi();
     fetchEventData(api);
   }, []);
-
-  const getCurrentEvents = () => {
-    return currentEvents;
-  };
 
   /**
    * Handle changes to an event title when adding
@@ -236,12 +232,12 @@ const Calendar = () => {
     });
   };
 
-  // Volunteer Delete to handle cancel/no
+  // Event Delete to handle cancel/no
   const handleNo = () => {
     setAlert({ open: false });
   };
 
-  // Volunteer Delete Alert "yes" handler, calls the deleteVolunteer function for removing volunteer from database and closes alert
+  // Event Delete Alert "yes" handler, calls the deleteEvent function for removing event from database and closes dialog
   const handleDelete = () => {
     if (
       window.confirm(
@@ -288,7 +284,6 @@ const Calendar = () => {
     return (
       <Box
         m={1}
-        //margin
         display="flex"
         justifyContent="flex-end"
         alignItems="flex-end"
@@ -342,6 +337,7 @@ const Calendar = () => {
     <Box m="20px">
       <Header title="Calendar" />
 
+      {/* Event Sidebar */}
       <Box display="flex" justifyContent="space-between">
         <Box
           flex="1 1 20%"
@@ -397,10 +393,11 @@ const Calendar = () => {
           </List>
         </Box>
 
+        {/* Dialogs for event view or add - default is hidden */}
         {renderEventDialog()}
         {renderAddEventDialog()}
 
-        {/* CALENDAR */}
+        {/* Calendar */}
         <Box flex="1 1 100%" ml="15px">
           <FullCalendar
             height="75vh"

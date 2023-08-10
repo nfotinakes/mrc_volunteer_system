@@ -16,15 +16,14 @@ import Snackbar from "@mui/material/Snackbar";
 
 /**
  * AddVolunteer component renders the dialog for adding a new volunteer to the database.
- * Props passed are the addVolunteer fetch from parent to add the volunteer on submit,
- * and refresh to fetch updated volunteer list for parent rendering.
+ * Props passed are the addVolunteer fetch from parent to add the volunteer on submit
  */
-const AddVolunteer = ({ addVolunteer, refresh }) => {
+const AddVolunteer = ({ addVolunteer }) => {
+  // Theme and colors
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode); // If theme colors needed
+  const colors = tokens(theme.palette.mode); // If colors needed
   const [snackbar, setSnackbar] = useState(null); // Store snackbar alerts
-
-  const handleCloseSnackbar = () => setSnackbar(null);
+  const [emails, setEmails] = useState(null); // Store all existing emails
 
   // Store volunteer info to be added in state
   const [volunteer, setVolunteer] = useState({
@@ -39,16 +38,36 @@ const AddVolunteer = ({ addVolunteer, refresh }) => {
     license_num: null,
     license_exp: null,
   });
+
   // Store date inputs
   const [inputDate, setInputDate] = useState(null);
   const [licenseExp, setLicenseExp] = useState(null);
   const [dialog, setDialog] = useState({ open: false }); // State for setting dialog open or close
+
+  const handleCloseSnackbar = () => setSnackbar(null);
+
+  /**
+   * Fetch all existing emails to check for duplicates on submission
+   */
+  const fetchEmails = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/volunteer/emails`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const emails = await response.json();
+      setEmails(emails);
+    } catch (error) {
+      console.log("Error fetching emails.");
+    }
+  };
 
   /**
    * Handler for toggling dialog open status
    */
   const handleClickOpen = () => {
     setDialog({ open: true });
+    fetchEmails();
   };
 
   /**
@@ -107,6 +126,11 @@ const AddVolunteer = ({ addVolunteer, refresh }) => {
         children: "Field has been left blank!",
         severity: "error",
       });
+    } else if (JSON.stringify(emails).includes(volunteer.email)) {
+      setSnackbar({
+        children: "That email already exists!",
+        severity: "error",
+      });
     } else {
       console.log("Form submitted:", volunteer);
       addVolunteer(volunteer);
@@ -130,7 +154,6 @@ const AddVolunteer = ({ addVolunteer, refresh }) => {
       });
       setDialog({ open: false });
     }
-    refresh();
   };
 
   /**
@@ -268,15 +291,15 @@ const AddVolunteer = ({ addVolunteer, refresh }) => {
         </DialogActions>
       </Dialog>
       {!!snackbar && (
-          <Snackbar
-            open
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            onClose={handleCloseSnackbar}
-            autoHideDuration={6000}
-          >
-            <Alert {...snackbar} onClose={handleCloseSnackbar} />
-          </Snackbar>
-        )}
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          onClose={handleCloseSnackbar}
+          autoHideDuration={6000}
+        >
+          <Alert {...snackbar} onClose={handleCloseSnackbar} />
+        </Snackbar>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -13,7 +13,6 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateField } from "@mui/x-date-pickers/DateField";
@@ -22,10 +21,14 @@ import dayjs from "dayjs";
 
 /**
  * AddLog component renders the dialog for adding a new site to database
+ * as parameters it accepts the list of volunteers, sites, and the addLog function
  */
 const AddLog = ({ volunteers, sites, addLog, refresh }) => {
+  //Theme and colors
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  // State data
   const [snackbar, setSnackbar] = useState(null);
   const [volunteerSelected, setVolunteerSelected] = useState("");
   const [siteSelected, setSiteSelected] = useState("");
@@ -68,29 +71,39 @@ const AddLog = ({ volunteers, sites, addLog, refresh }) => {
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform any necessary form submission logic here
-    if (!log) {
+
+    // If date entered, format for submission
+    if (date) {
+      log.date = dayjs(date).format();
+    }
+
+    // Check for blank fields, submit if valid
+    if (
+      !log.volunteer_id ||
+      !log.site_id ||
+      !log.date ||
+      !log.hours ||
+      !log.role
+    ) {
       setSnackbar({
-        children: "Site name must not be blank!",
+        children: "Log fields must not be blank (except note)!",
         severity: "error",
       });
     } else {
-      log.date = dayjs(date).format();
       addLog(log);
-      console.log("Form submitted:", log);
+      console.log("Log submitted:", log);
+      setLog({
+        volunteer_id: null,
+        site_id: null,
+        date: null,
+        hours: null,
+        role: null,
+        note: null,
+      });
+      setVolunteerSelected("");
+      setSiteSelected("");
+      setDialog({ open: false });
     }
-    setLog({
-      volunteer_id: null,
-      site_id: null,
-      date: null,
-      hours: null,
-      role: null,
-      note: null,
-    });
-    setVolunteerSelected("");
-    setSiteSelected("");
-    setDialog({ open: false });
-    refresh();
   };
 
   /**
@@ -99,16 +112,11 @@ const AddLog = ({ volunteers, sites, addLog, refresh }) => {
   const handleEmailChange = (event) => {
     log.volunteer_id = event.target.value;
     setVolunteerSelected(event.target.value);
-    console.log("log: ", log);
   };
 
   const handleSiteChange = (event) => {
     log.site_id = event.target.value;
     setSiteSelected(event.target.value);
-  };
-
-  const handleDateChange = (event) => {
-    log.date = event.target.value;
   };
 
   const handleHoursChange = (event) => {
@@ -129,9 +137,7 @@ const AddLog = ({ volunteers, sites, addLog, refresh }) => {
   return (
     <div>
       <Box
-        // m={1}
         m="auto"
-        //margin
         display="flex"
         justifyContent="flex-end"
         alignItems="flex-end"
@@ -153,7 +159,7 @@ const AddLog = ({ volunteers, sites, addLog, refresh }) => {
           "& .MuiDialog-container": {
             "& .MuiPaper-root": {
               width: "100%",
-              maxWidth: "500px", 
+              maxWidth: "500px",
             },
           },
         }}
@@ -161,6 +167,7 @@ const AddLog = ({ volunteers, sites, addLog, refresh }) => {
         <DialogTitle>Add Log</DialogTitle>
         <DialogContent style={{ paddingTop: 20 }}>
           <FormControl fullWidth>
+            {/* Volunteer Selection */}
             <InputLabel>Select Volunteer</InputLabel>
             <Select
               style={{ margin: 3 }}
@@ -182,12 +189,12 @@ const AddLog = ({ volunteers, sites, addLog, refresh }) => {
                 </MenuItem>
               ))}
             </Select>
-            {/* <FormHelperText>First Name, Last Name, & Email</FormHelperText> */}
           </FormControl>
           <br />
           <br />
 
           <FormControl fullWidth>
+            {/* Site selection */}
             <InputLabel>Select Site</InputLabel>
             <Select
               style={{ margin: 3 }}
@@ -202,9 +209,9 @@ const AddLog = ({ volunteers, sites, addLog, refresh }) => {
                 </MenuItem>
               ))}
             </Select>
-            {/* <FormHelperText>Site Name</FormHelperText> */}
           </FormControl>
 
+          {/* Date volunteered selection */}
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DateField"]}>
               <DateField
@@ -216,6 +223,7 @@ const AddLog = ({ volunteers, sites, addLog, refresh }) => {
             </DemoContainer>
           </LocalizationProvider>
 
+          {/* Hours */}
           <TextField
             style={{ margin: 3 }}
             label="Hours"
@@ -223,17 +231,22 @@ const AddLog = ({ volunteers, sites, addLog, refresh }) => {
             onChange={handleHoursChange}
           />
 
+          {/* Role */}
           <TextField
             style={{ margin: 3 }}
             label="Role"
             name="role"
             onChange={handleRoleChange}
           />
+
+          {/* Notes */}
           <TextField
             style={{ margin: 3 }}
             label="Note"
             name="note"
             onChange={handleNotesChange}
+            multiline
+            rows={4}
             fullWidth
           />
 
@@ -251,11 +264,11 @@ const AddLog = ({ volunteers, sites, addLog, refresh }) => {
       {!!snackbar && (
         <Snackbar
           open
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
           onClose={handleCloseSnackbar}
           autoHideDuration={6000}
         >
-          <Alert {...snackbar} onclose={handleCloseSnackbar} />
+          <Alert {...snackbar} onClose={handleCloseSnackbar} />
         </Snackbar>
       )}
     </div>
