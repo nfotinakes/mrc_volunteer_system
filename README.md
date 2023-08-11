@@ -4,7 +4,7 @@
 <h1 align="center">MRC Volunteer System</h3>
 
   <p align="center">
-    A tool for MRC Unit coordinators to manage their MRC volunteer network and to track, organize, or interact with MRC Volunteer Data.
+    A tool for MRC Unit Coordinators to manage their MRC volunteer network and track, organize, or interact with MRC Volunteer Data.
     <br />
     <br />
     <br />
@@ -20,7 +20,7 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#project-structure">Project Structure</a></li>
       </ul>
     </li>
     <li>
@@ -51,7 +51,8 @@
     <li><a href="#usage">Usage</a></li>
       <ul>
         <li><a href="#dashboard-1">Dashboard</a></li>
-        <li><a href="#volunteer-2">Volunteer</a></li>
+        <li><a href="#volunteer-2">Volunteers</a></li>
+        <li><a href="#volunteer-2">Sites & Logs</a></li>
         <li><a href="#data-import-1">Data Import</a></li>
         <li><a href="#calendar-1">Calendar</a></li>
         <li><a href="#additional-info">Additional Info</a></li>
@@ -511,8 +512,10 @@ Delete /event/delete/{id}
 
 This section will outline some of the structure and libraries used within the components of the front end. For more detailed user use cases, see the following section, <a href="#usage">Usage</a>.
 
-The client/front end is structured with each major page organized within the `src/scenes` subdirectory, with `index.jsx` as the main component, and any additional sub-components are located in that folder. Global components such as the Sidebar and Topbar are located in the `src/global` folder, and any additional components, such as analytical charts are
-located in the `src/components` folder.
+The client/front end is structured with each major page organized within the `client/src/scenes` subdirectory, with `index.js` as the entry level component, `App.js` as the main component, and any additional sub-components are located in that folder. Global components such as the Sidebar and Topbar are located in the `client/src/scenes/global` subdirectory, and any additional variable components, such as the analytical BarChart are located in the `client/src/components` folder. If you wish to add more Nivo charts, add them here.
+
+The `.env` file contains the API URL to use site-wide, edit this to your URL.
+
 
 The client-side makes heavy use of the React library [Material UI](https://mui.com/) such as the following MUI components:
 * [Box](https://mui.com/material-ui/react-box/)
@@ -612,6 +615,12 @@ https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/31c34b23-578b
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Sites & Logs
+
+Sites and Logs pages are functionally very similar to the Volunteers page, use the volunteer usage videos for reference.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Data Import
 
 Volunteers can be added via a CSV file by uploading the file and clicking "Add Volunteers." File headers must match, and emails must be unique.
@@ -659,11 +668,11 @@ Thank you to CSUMB and CS Online.
 
 ### Credits
 
-The following sources were used as either reference, inspiration, or code adaptation (or for just learning React in general!):
+The following sources were used as either reference, inspiration, code adaptation, or for just learning more about React in general:
 * [Codenemy](https://www.youtube.com/@Codenemy)
 * [Code Like Pro](https://www.youtube.com/@CodeLikePro22/)
 * [Ed Roh](https://edroh.com/)
-* [React](https://react.dev/reference/react)
+* [React](https://react.dev/)
 * [MUI](https://mui.com/)
 
 
