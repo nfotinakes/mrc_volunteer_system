@@ -52,7 +52,7 @@
       <ul>
         <li><a href="#dashboard-1">Dashboard</a></li>
         <li><a href="#volunteer-2">Volunteers</a></li>
-        <li><a href="#volunteer-2">Sites & Logs</a></li>
+        <li><a href="#sites--logs">Sites & Logs</a></li>
         <li><a href="#data-import-1">Data Import</a></li>
         <li><a href="#calendar-1">Calendar</a></li>
         <li><a href="#additional-info">Additional Info</a></li>
@@ -126,6 +126,8 @@ Further detailed information on the database can be found in the following secti
 ### ER Diagram
 
 ![ER Diagram](https://i.imgur.com/43fz6Ya.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Table Info
 volunteer
