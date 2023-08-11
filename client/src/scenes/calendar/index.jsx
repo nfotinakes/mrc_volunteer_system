@@ -58,8 +58,7 @@ const Calendar = () => {
    */
   const fetchEventData = (api) => {
     let firstEvents = [];
-    console.log("Fetching Events");
-    // const token = Cookies.get("XSRF-TOKEN");
+    console.log("Fetching Events...");
     fetch(`${process.env.REACT_APP_API_URL}/event`)
       .then((response) => {
         return response.json();
@@ -101,26 +100,13 @@ const Calendar = () => {
     })
       .then((res) => {
         console.log(res);
-        // setSnackbar({
-        //   children: "Volunteer successfully deleted",
-        //   severity: "success",
-        // });
       })
       .catch((err) => {
         console.log("error deleting...");
         console.log(err);
-        // setSnackbar({
-        //   children: "Error deleting volunteer",
-        //   severity: "error",
-        // });
       });
   };
 
-  // async function fetchEventData() {
-  //   let response = await fetch(`http://localhost:5000/event`);
-  //   let events = await response.json();
-  //   return events;
-  // }
 
   /**
    * This function will take all events from the array, and add to the calendar for display
@@ -128,11 +114,9 @@ const Calendar = () => {
    * @param {Array} eventArray The array of all events fetched from database
    */
   const addEventLoad = (api, eventArray) => {
-    console.log(eventArray);
     eventArray.forEach((element) => api.addEvent(element));
   };
 
-  //TODO: Check this out
   useEffect(() => {
     const api = calendarRef.current.getApi();
     fetchEventData(api);
@@ -251,7 +235,6 @@ const Calendar = () => {
       setAlert({ id: null, open: false });
     }
   };
-  const handleEntered = () => {};
 
   const renderEventDialog = (event) => {
     return (
@@ -291,9 +274,7 @@ const Calendar = () => {
         <Dialog
           maxWidth="sm"
           fullWidth
-          // TransitionProps={{ onEntered: handleEntered }}
           open={addEventAlert.open}
-          // onClose={handleNo}
         >
           <DialogTitle>Add New Event</DialogTitle>
           <DialogContent dividers style={{ overflow: "hidden" }}>

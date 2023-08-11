@@ -25,10 +25,10 @@ const Dashboard = () => {
    * Retrieve the total hours volunteerd from database
    */
   const fetchTotalHours = () => {
-    console.log("Fetching License");
+    console.log("Fetching Total Hours");
     fetch(`${process.env.REACT_APP_API_URL}/stats/totalHours`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetch total hours response: ", response);
         return response.json();
       })
       .then((responseData) => {
@@ -37,8 +37,6 @@ const Dashboard = () => {
         } else {
           setHours(responseData[0].total_hours);
         }
-
-        console.log(responseData);
       })
       .catch((err) => {
         console.error(err);
@@ -52,7 +50,7 @@ const Dashboard = () => {
     console.log("Fetching Recent Volunteers");
     fetch(`${process.env.REACT_APP_API_URL}/stats/recentVolunteers`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetch recent volunteers response: ", response);
         return response.json();
       })
       .then((responseData) => {
@@ -70,7 +68,7 @@ const Dashboard = () => {
     console.log("Fetching Top Volunteers");
     fetch(`${process.env.REACT_APP_API_URL}/stats/topHours`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetch top volunteers response: ", response);
         return response.json();
       })
       .then((responseData) => {
@@ -88,7 +86,7 @@ const Dashboard = () => {
     console.log("Fetching Volunteer Count");
     fetch(`${process.env.REACT_APP_API_URL}/stats/volunteerCount`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetch volunteer count response: ", response);
         return response.json();
       })
       .then((responseData) => {
@@ -103,10 +101,10 @@ const Dashboard = () => {
    * Fetch count of all sites in the system
    */
   const fetchSiteCount = () => {
-    console.log("Fetching Volunteer Count");
+    console.log("Fetching Site Count");
     fetch(`${process.env.REACT_APP_API_URL}/stats/siteCount`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetch site count response: ", response);
         return response.json();
       })
       .then((responseData) => {

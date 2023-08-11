@@ -10,6 +10,8 @@ import { tokens } from "../../theme";
  * The DataImport renders a page with option to import volunteer data from a CSV file
  */
 const DataImport = () => {
+
+  // Import theme and colors
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -39,7 +41,6 @@ const DataImport = () => {
       headers: { "Content-Type": "application/json" },
     });
     const emails = await response.json();
-    console.log("Emails: ", emails);
     setEmails(emails);
   };
 
@@ -61,7 +62,6 @@ const DataImport = () => {
           const valuesArray = [];
 
           // Iterating data to get column name and their values
-          // TODO: check this
           results.data.map((d) => {
             rowsArray.push(Object.keys(d));
             valuesArray.push(Object.values(d));
