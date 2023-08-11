@@ -4,7 +4,7 @@
 <h1 align="center">MRC Volunteer System</h3>
 
   <p align="center">
-    A tool for MRC Unit Coordinators to track, organize, and interact with MRC Volunteer Data and manage an MRC volunteer network.
+    A tool for MRC Unit coordinators to manage their MRC volunteer network and to track, organize, or interact with MRC Volunteer Data.
     <br />
     <br />
     <br />
@@ -655,7 +655,17 @@ Project Link: [https://github.com/nfotinakes/mrc_volunteer_system](https://githu
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Put Resources HERE
+Thank you to CSUMB and CS Online.
+
+### Credits
+
+The following sources were used as either reference, inspiration, or code adaptation (or for just learning React in general!):
+* [Codenemy](https://www.youtube.com/@Codenemy)
+* [Code Like Pro](https://www.youtube.com/@CodeLikePro22/)
+* [Ed Roh](https://edroh.com/)
+* [React](https://react.dev/reference/react)
+* [MUI](https://mui.com/)
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
