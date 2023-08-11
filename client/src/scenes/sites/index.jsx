@@ -208,7 +208,6 @@ const Sites = () => {
     // The `autoFocus` is not used because, if used, the same Enter that saves
     // the cell triggers "No". Instead, we manually focus the "No" button once
     // the dialog is fully open.
-    // noButtonRef.current?.focus();
   };
 
   // Dialog for confirming update to site

@@ -107,7 +107,6 @@ const Calendar = () => {
       });
   };
 
-
   /**
    * This function will take all events from the array, and add to the calendar for display
    * @param {Object} api The underlying calendar API

@@ -41,11 +41,11 @@ const LogModal = ({ id, name }) => {
    * @param {number} id The volunteer id 
    */
   const fetchLogs = (id) => {
-    console.log("Fetching Logs");
+    console.log("Fetching Logs...");
     // const token = Cookies.get("XSRF-TOKEN");
     fetch(`http://localhost:5000/log/volId?id=${id}`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetch logs response: ", response);
         return response.json();
       })
       .then((responseData) => {
@@ -61,11 +61,11 @@ const LogModal = ({ id, name }) => {
    * @param {number} id The volunteer id
    */
   const fetchHours = (id) => {
-    console.log("Fetching Logs");
+    console.log("Fetching hours...");
     // const token = Cookies.get("XSRF-TOKEN");
     fetch(`http://localhost:5000/log/volHours?id=${id}`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetch hours response: ", response);
         return response.json();
       })
       .then((responseData) => {
