@@ -101,6 +101,11 @@ Within the `client/src/scenes` includes all main pages and global components. <b
 
 The server has the `index.js` as the server entry point and routes are organized within the subdirectory: `server/routes` <br>
 
+After downloading source code and setting up a local copy, running the following npm install command will download all dependencies into a `node_modules` folder in the project (do this for both client and server):
+```
+npm i
+```
+
 
 
 The following sections will provide further specifics on all aspects of the system, including database design, server and API specifics, and client-side functionality. See the table of contents at the top of the file for easy navigation to any section of this file. 
