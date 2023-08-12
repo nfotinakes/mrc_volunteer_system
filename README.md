@@ -123,7 +123,7 @@ server/data/mrc_create_schema.sql
 ```
 Mock data can be found in the `server/data` subdirectory as well with an SQL file for mock data insertion, and a CSV for mock data import.
 
-Server environment variables are saved in the `.env` file. Edit accordingly to match your database.
+An example enviroment variable file is provided as `.env.example` in the root folder. Edit accordingly to match your database and rename to `.env`
 
 Further detailed information on the database can be found in the following sections:
 
@@ -521,7 +521,7 @@ This section will outline some of the structure and libraries used within the co
 
 The client/front end is structured with each major page organized within the `client/src/scenes` subdirectory, with `index.js` as the entry level component, `App.js` as the main component, and any additional sub-components are located in that folder. Global components such as the Sidebar and Topbar are located in the `client/src/scenes/global` subdirectory, and any additional variable components, such as the analytical BarChart are located in the `client/src/components` folder. If you wish to add more Nivo charts, add them here.
 
-The `.env` file contains the API URL to use site-wide, edit this to your URL.
+The `.env.example` file gives an example of the enviroment variable file for the API URL to use site-wide, edit this to your URL and rename file to `.env`.
 
 
 The client-side makes heavy use of the React library [Material UI](https://mui.com/) such as the following MUI components:
