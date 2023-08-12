@@ -73,6 +73,9 @@ The Medical Reserve Corp is a federal program of around 800 units and over 300,0
 
 Funding and grants for local MRC units are often limited or competitive, which means MRC unit coordinators are often forced to develop their own systems for managing their local MRC volunteer network. Funds cannot usually be allocated to the development of specialized systems or purchasing pre-existing volunteer tracking software. The goal of the MRC Volunteer System is to provide a base full-stack web application for any MRC unit coordinator to use as a volunteer network management tool. This system will provide the means to store, edit, and organize all necessary information on volunteers, volunteer sites, and volunteer logs. Additional features include volunteer network analytics, CSV import capabilities, calendar event/note storage, and the ability to customize as one sees fit with this source code! 
 
+* [Project Proposal](https://docs.google.com/document/d/1OL9FzpB6sC8jCgKwYCOnpUwt23hY7_WQn_aC38coa9I/edit?usp=sharing)
+* [Status Update & Testing Report](https://docs.google.com/document/d/1G8W1g2-3GyK892hlN71VCqEx8rc1eRmKS8GDfj848eQ/edit?usp=sharing)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
