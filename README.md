@@ -94,6 +94,7 @@ Subdirectories of the client include: <br>
 
 --client <br>
 ----public <br>
+--------assets <br>
 ----src <br>
 --------components <br>
 --------scenes <br>
