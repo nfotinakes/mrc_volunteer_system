@@ -7,9 +7,9 @@ const pool = require("../dbPool.js");
  * for analytical widgets
  */
 
-// Get all Log info (not currently used)
+// Get log count (not currently used)
 router.get("/", async (req, res) => {
-    let sql = `SELECT l.log_id, v.first_name, v.last_name, s.site_name, s.zipcode, l.date, l.hours, l.role, l.note FROM mrc_volunteer.log as l JOIN volunteer as v ON l.volunteer_id = v.volunteer_id JOIN mrc_volunteer.site as s on l.site_id = s.site_id;`;
+    let sql = `SELECT COUNT(log_id) as total_logs FROM log;`;
     let rows = await executeSQL(sql);
     res.status(200).json(rows);
   });

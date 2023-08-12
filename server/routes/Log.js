@@ -88,7 +88,7 @@ router.put("/update/:volid/:siteid", async (req, res) => {
   res.send("Log Updated");
 });
 
-// Update Site by Log ID
+// Update log by Log ID
 router.put("/update/:logid", async (req, res) => {
   let logId = req.params.logid;
   let date = req.body.date.split("T")[0];
