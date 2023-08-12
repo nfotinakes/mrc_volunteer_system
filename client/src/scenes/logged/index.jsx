@@ -75,7 +75,7 @@ const Logs = () => {
     console.log("Fetching Sites");
     fetch(`${process.env.REACT_APP_API_URL}/site/names`)
       .then((response) => {
-        console.log("Fetching sites response:" + response);
+        console.log("Fetching sites response:", response);
         return response.json();
       })
       .then((responseData) => {

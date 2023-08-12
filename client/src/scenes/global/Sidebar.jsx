@@ -14,7 +14,7 @@ import { tokens } from "../../theme";
 import "react-pro-sidebar/dist/css/styles.css";
 
 /**
- * A component for each item of the sidebar
+ * An Item component for each item of the sidebar
  */
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -49,6 +49,7 @@ const Sidebar = () => {
   const [selected, setSelected] = useState("Dashboard"); // Default selected is Dashboard
 
   return (
+    // Set some styling for sidebar such as hover and active selected
     <Box
       sx={{
         "& .pro-sidebar-inner": {

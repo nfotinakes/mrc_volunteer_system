@@ -5,7 +5,8 @@ import { tokens } from "../theme";
 
 /**
  * BarChart component is used to display all licensure types in the system.
- * Utilizes the Nivo library for analytical display.
+ * Utilizes the Nivo library for analytical display. View Nivo documentation for
+ * more details on how to use barchart.
  * @returns the bar chart
  */
 const BarChart = () => {
@@ -20,7 +21,7 @@ const BarChart = () => {
     console.log("Fetching Licensures");
     fetch(`http://localhost:5000/stats/licenseCount`)
       .then((response) => {
-        console.log("FETCH RESP:" + response);
+        console.log("Fetch licensure count response: ", response);
         return response.json();
       })
       .then((responseData) => {

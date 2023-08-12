@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Chivo:wght@400;600;700&display=swap");
 
+/* This index.css sets some basic styling for the site. Import font of choice from google*/
+/* Note: Most styling is done via the sx prop within components */
 html,
 body,
 #root,
@@ -15,6 +17,7 @@ body,
   position: relative;
 }
 
+/* The following stylizes the scroll-bar for application */
 ::-webkit-scrollbar {
   width: 10px;
 }

@@ -20,6 +20,7 @@ import { ColorModeContext, useMode } from "./theme";
 function App() {
   const [theme, colorMode] = useMode();
   return (
+    // Wrap app in the theme/color settings
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -27,6 +28,7 @@ function App() {
           <Sidebar />
           <main className="content">
             <Topbar />
+            {/* Routes to each page and corresponding components */}
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/volunteer" element={<Volunteer />} />
