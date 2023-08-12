@@ -123,7 +123,7 @@ server/data/mrc_create_schema.sql
 ```
 Mock data can be found in the `server/data` subdirectory as well with an SQL file for mock data insertion, and a CSV for mock data import.
 
-An example enviroment variable file is provided as `.env.example` in the root folder. Edit accordingly to match your database and rename to `.env`
+An example enviroment variable file is provided as `.env.example`. Edit accordingly to match your database and rename to `.env`
 
 Further detailed information on the database can be found in the following sections:
 
