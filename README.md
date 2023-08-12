@@ -95,7 +95,7 @@ Subdirectories of the client include: <br>
 --------components <br>
 --------scenes <br>
 
-Within the `client/public` folder the `/assets` folder includes logos and background images. <br>
+Within the `client/public` subdirectory, the `/assets` folder includes logos and background images. <br>
 Within the `client/src/components` folder are reusuable components such as the Header. <br>
 Within the `client/src/scenes` includes all main pages and global components. <br>
 
