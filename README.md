@@ -1,4 +1,3 @@
-
 <a name="readme-top"></a>
 
 <h1 align="center">MRC Volunteer System</h3>
@@ -79,7 +78,7 @@ Funding and grants for local MRC units are often limited or competitive, which m
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
+<!-- Built with -->
 ### Built With
 
 * [![MySQL][MySQL]][MySQL-url]
@@ -118,7 +117,7 @@ The following sections will provide further specifics on all aspects of the syst
 
 
 
-<!-- GETTING STARTED -->
+<!-- Database info -->
 ## Database
 
 The MRC Volunteer System uses a relational database built with MySQL. To create the database schema, the associated file can be found in the project directory at:
@@ -194,7 +193,7 @@ event
 
 
 
-<!-- Server -->
+<!-- Server Info -->
 ## Server
 
 The server routes are organized in the subdirectory `server/routes` routed from the `index.js` file to `Stats`, `Volunteer`, `Site`, and `Event` subfolders/routes.
@@ -518,7 +517,7 @@ Delete /event/delete/{id}
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- Client -->
+<!-- Client Info -->
 ## Client
 
 This section will outline some of the structure and libraries used within the components of the front end. For more detailed user use cases, see the following section, <a href="#usage">Usage</a>.
@@ -584,7 +583,7 @@ The background image and logos are in the `/public/assets` sub-directory.
 
 
 
-<!-- Usage -->
+<!-- Usage Info -->
 ## Usage
 
 ### Dashboard
@@ -661,7 +660,7 @@ https://github.com/nfotinakes/mrc_volunteer_system/assets/93119727/d2f0a5bf-6b21
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-<!-- CONTACT -->
+<!-- Contact Info -->
 ## Contact
 
 Nicholas Fotinakes - [LinkedIn](https://www.linkedin.com/in/nfotinakes/) - nfotinakes@csumb.edu
@@ -672,7 +671,7 @@ Project Link: [https://github.com/nfotinakes/mrc_volunteer_system](https://githu
 
 
 
-<!-- ACKNOWLEDGMENTS -->
+<!-- Acknowledgements and Sources -->
 ## Acknowledgments
 
 Thank you to CSUMB and CS Online.
@@ -691,7 +690,7 @@ The following sources were used as either reference, inspiration, code adaptatio
 
 
 
-<!-- MARKDOWN LINKS & IMAGES -->
+<!-- Markdown links & images -->
 [product-screenshot]: images/screenshot.png
 [MySQL]: https://img.shields.io/badge/MySQL-black?style=for-the-badge&logo=mysql&logoColor=white&color=%234479A1
 [MySQL-url]: https://www.mysql.com/
