@@ -121,7 +121,7 @@ The MRC Volunteer System uses a relational database built with MySQL. To create 
 ```
 server/data/mrc_create_schema.sql
 ```
-Mock data can be found in the `server/data` subdirectory as well.
+Mock data can be found in the `server/data` subdirectory as well with an SQL file for mock data insertion, and a CSV for mock data import.
 
 Server environment variables are saved in the `.env` file. Edit accordingly to match your database.
 
